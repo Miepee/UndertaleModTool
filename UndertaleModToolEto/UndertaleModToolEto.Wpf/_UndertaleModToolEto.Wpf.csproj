@@ -1,0 +1,17 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net48</TargetFramework>
+  </PropertyGroup>
+  
+  <ItemGroup>
+    <ProjectReference Include="..\UndertaleModToolEto\UndertaleModToolEto.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Eto.Platform.Win" Version="2.5.10" />
+    <PackageReference Include="Eto.Platform.Windows" Version="2.5.10" />
+  </ItemGroup>
+
+</Project>

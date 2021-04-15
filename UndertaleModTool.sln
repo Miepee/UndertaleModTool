@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.27703.2035
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30907.101
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UndertaleModTool", "UndertaleModTool\UndertaleModTool.csproj", "{C703A485-DBFB-4601-8A26-42E64CCF812F}"
 EndProject
@@ -10,6 +10,14 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UndertaleModLib", "UndertaleModLib\UndertaleModLib.csproj", "{4781ADAC-9469-42C4-B357-4A0A157D7FCD}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UndertaleModTests", "UndertaleModTests\UndertaleModTests.csproj", "{0B51CE42-C047-4B07-A8C9-88F4E3EA6DBD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UndertaleModToolEto", "UndertaleModToolEto\UndertaleModToolEto\UndertaleModToolEto.csproj", "{2650BB6E-2F9B-4D6D-ACB1-6A14C6017850}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UndertaleModToolEto.Gtk", "UndertaleModToolEto\UndertaleModToolEto.Gtk\UndertaleModToolEto.Gtk.csproj", "{BCB9C1C4-EDEE-4349-8092-E163276869A5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UndertaleModToolEto.Mac", "UndertaleModToolEto\UndertaleModToolEto.Mac\UndertaleModToolEto.Mac.csproj", "{80A902EF-8FFD-436C-8406-F74A9EA9002B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UndertaleModToolEto.Wpf", "UndertaleModToolEto\UndertaleModToolEto.Wpf\UndertaleModToolEto.Wpf.csproj", "{1A1877B6-5B42-49B3-A0DE-B2514D56E802}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +41,22 @@ Global
 		{0B51CE42-C047-4B07-A8C9-88F4E3EA6DBD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0B51CE42-C047-4B07-A8C9-88F4E3EA6DBD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0B51CE42-C047-4B07-A8C9-88F4E3EA6DBD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2650BB6E-2F9B-4D6D-ACB1-6A14C6017850}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2650BB6E-2F9B-4D6D-ACB1-6A14C6017850}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2650BB6E-2F9B-4D6D-ACB1-6A14C6017850}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2650BB6E-2F9B-4D6D-ACB1-6A14C6017850}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BCB9C1C4-EDEE-4349-8092-E163276869A5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BCB9C1C4-EDEE-4349-8092-E163276869A5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BCB9C1C4-EDEE-4349-8092-E163276869A5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BCB9C1C4-EDEE-4349-8092-E163276869A5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{80A902EF-8FFD-436C-8406-F74A9EA9002B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{80A902EF-8FFD-436C-8406-F74A9EA9002B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{80A902EF-8FFD-436C-8406-F74A9EA9002B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{80A902EF-8FFD-436C-8406-F74A9EA9002B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1A1877B6-5B42-49B3-A0DE-B2514D56E802}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1A1877B6-5B42-49B3-A0DE-B2514D56E802}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1A1877B6-5B42-49B3-A0DE-B2514D56E802}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1A1877B6-5B42-49B3-A0DE-B2514D56E802}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
