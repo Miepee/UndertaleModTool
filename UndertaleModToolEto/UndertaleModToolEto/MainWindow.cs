@@ -8,6 +8,8 @@ using System.Diagnostics;
 using System.Reflection;
 using System.Globalization;
 using System.Collections.Generic;
+using System.IO.Pipes;
+using System.Collections.ObjectModel;
 
 namespace UndertaleModToolEto
 {
@@ -26,82 +28,21 @@ namespace UndertaleModToolEto
         /*public Visibility IsGMS2 => (Data?.GeneralInfo?.Major ?? 0) >= 2 ? Visibility.Visible : Visibility.Collapsed;
         //God this is so ugly, if there's a better way, please, put in a pull request
         public Visibility IsExtProductIDEligible => (((Data?.GeneralInfo?.Major ?? 0) >= 2) || (((Data?.GeneralInfo?.Major ?? 0) == 1) && (((Data?.GeneralInfo?.Build ?? 0) >= 1773) || ((Data?.GeneralInfo?.Build ?? 0) == 1539)))) ? Visibility.Visible : Visibility.Collapsed;
-        
-        public ObservableCollection<object> SelectionHistory { get; } = new ObservableCollection<object>();
         */
+        public ObservableCollection<object> SelectionHistory { get; } = new ObservableCollection<object>();
+        
         private bool _CanSave = false;
         public bool CanSave { get { return _CanSave; } private set { _CanSave = value; PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("CanSave")); } }
         public bool CanSafelySave = false;
         public bool FinishedMessageEnabled = true;
 
         public event PropertyChangedEventHandler PropertyChanged;
-        //private LoaderDialog scriptDialog;
+        //private LoaderDialog scriptDialog;        //TODO: this is a custom form, needs to be implemented
 
-        public TreeGridView treeGridView1;
+        public Dictionary<string, NamedPipeServerStream> childFiles = new Dictionary<string, NamedPipeServerStream>();
 
-        public static TextArea eventLog;
-        public static Panel contentContainer;
-        public static Navigation navigation;
-        public static Control testMethod()
-        {
-            contentContainer = new Panel();
+        private SectionList DataList { get; set; } 
 
-            if (Splitter.IsSupported)
-            {
-                var splitter = new Splitter
-                {
-                    Position = 200,
-                    FixedPanel = SplitterFixedPanel.Panel1,
-                    Panel1 = new Label { Text = "ha"},
-                    Panel1MinimumSize = 150,
-                    Panel2MinimumSize = 300,
-                    // for now, don't show log in mobile
-                    //Panel2 = RightPane()
-                    Panel2 = new Label { Text = "haaaa" }
-                };
-
-                return splitter;
-            }
-            throw new ArgumentException(string.Format(CultureInfo.CurrentCulture, "Platform must support splitter or navigation"));
-        }
-
-
-
-        public SectionList SectionList { get; set; } 
-        public Control testMethod2()
-        {
-            
-
-            SectionList.Focus();
-            treeGridView1 = new TreeGridView { };
-            var treeGridItemCollection = new TreeGridItemCollection();
-            treeGridView1.Columns.Add(new GridColumn() { HeaderText = "irgendwas", DataCell = new TextBoxCell(" test123") });
-            treeGridView1.Columns.Add(new GridColumn() { HeaderText = "liste2", DataCell = new TextBoxCell("sdf") });
-            int i = 0;
-            for (i = 0; i < 5; i++)
-            {
-                var item = new TreeGridItem(new string[] { "sasdfads", "irgendwas", "liste2" } );
-                item.Values = new TextBox[] { new TextBox { Text = "ele1" }, new TextBox { Text = "ele2" } };
-                item.Parent = new TreeGridItem();
-                item.Tag =  "asdfadsf" ;
-                treeGridItemCollection.Add(item);
-            }
-
-          
-
-            treeGridView1.DataStore = treeGridItemCollection;
-
-            var splitter = new Splitter
-            {
-                SplitterWidth = 5,
-                Panel1MinimumSize = 100,
-                Panel1 = SectionList.Control,
-                
-                Panel2  = new Panel { }
-            };
-       
-            return splitter;
-        }
 
         public MainWindow()
         {
@@ -109,44 +50,50 @@ namespace UndertaleModToolEto
             Icon = new Icon(1f, new Bitmap(UndertaleModToolEto.Properties.Resources.icon));
             MinimumSize = new Size(450, 800);
 
-            var emptyList = new List<Section>();
+            ClientSize = new Size(1200, 800);
+
             var treeDataHead = new List<Section>();
             var nodes = new List<Section>();
 
-            nodes.Add(new Section("General info", emptyList));
-            nodes.Add(new Section("Global init", emptyList));
-            nodes.Add(new Section("Game End scripts", emptyList));
-            nodes.Add(new Section("Audio groups", emptyList));
-            nodes.Add(new Section("Sounds", emptyList));
-            nodes.Add(new Section("Sprites", emptyList));
-            nodes.Add(new Section("Backgrounds & Tile sets", emptyList));
-            nodes.Add(new Section("Paths", emptyList));
-            nodes.Add(new Section("Scripts", emptyList));
-            nodes.Add(new Section("Shaders", emptyList));
-            nodes.Add(new Section("Fonts", emptyList));
-            nodes.Add(new Section("Timelines", emptyList));
-            nodes.Add(new Section("Game objects", emptyList));
-            nodes.Add(new Section("Rooms", emptyList));
-            nodes.Add(new Section("Extensions", emptyList));
-            nodes.Add(new Section("Texture page items", emptyList));
-            nodes.Add(new Section("Code", emptyList));
-            nodes.Add(new Section("Variables", emptyList));
-            nodes.Add(new Section("Functions", emptyList));
-            nodes.Add(new Section("Code locals (unused?)", emptyList));
-            nodes.Add(new Section("Strings", emptyList));
-            nodes.Add(new Section("Embedded textures", emptyList));
-            nodes.Add(new Section("Embedded audio", emptyList));
-            nodes.Add(new Section("Texture group information", emptyList));
-            nodes.Add(new Section("Embedded images", emptyList));
+            nodes.Add(new Section("General info"));
+            nodes.Add(new Section("Global init"));
+            nodes.Add(new Section("Game End scripts"));
+            nodes.Add(new Section("Audio groups"));
+            nodes.Add(new Section("Sounds"));
+            nodes.Add(new Section("Sprites"));
+            nodes.Add(new Section("Backgrounds & Tile sets"));
+            nodes.Add(new Section("Paths"));
+            nodes.Add(new Section("Scripts"));
+            nodes.Add(new Section("Shaders"));
+            nodes.Add(new Section("Fonts"));
+            nodes.Add(new Section("Timelines"));
+            nodes.Add(new Section("Game objects"));
+            nodes.Add(new Section("Rooms"));
+            nodes.Add(new Section("Extensions"));
+            nodes.Add(new Section("Texture page items"));
+            nodes.Add(new Section("Code"));
+            nodes.Add(new Section("Variables"));
+            nodes.Add(new Section("Functions"));
+            nodes.Add(new Section("Code locals (unused?)"));
+            nodes.Add(new Section("Strings"));
+            nodes.Add(new Section("Embedded textures"));
+            nodes.Add(new Section("Embedded audio"));
+            nodes.Add(new Section("Texture group information"));
+            nodes.Add(new Section("Embedded images"));
 
             treeDataHead.Add(new Section("Data", nodes));
+            DataList = new SectionListTreeGridView(treeDataHead);
 
-            SectionList = new SectionListTreeGridView(treeDataHead);
-
-
-            Content = testMethod2();
-
-            this.MouseDoubleClick += MainWindow_MouseDoubleClick;
+            DataList.Focus();
+            Content = new Splitter
+            {
+                SplitterWidth = 5,
+                Position = 161,
+                Panel1MinimumSize = 15,
+                //TODO: add a minimum size of panel2
+                Panel1 = DataList.Control,
+                Panel2 = new Panel { }
+            };
             
 
             // create a few commands that can be used for the menu and toolbar
@@ -159,6 +106,25 @@ namespace UndertaleModToolEto
             var aboutCommand = new Command { MenuText = "About..." };
             aboutCommand.Executed += (sender, e) => new AboutDialog() { ProgramDescription = "A tool that lets you modify Game Maker: Studio files", WebsiteLabel = "Source Code", Website = new Uri("https://github.com/krzys-h/UndertaleModTool"), ProgramName = "UndertaleModTool by krzys_h v" , Version = FileVersionInfo.GetVersionInfo(Assembly.GetExecutingAssembly().Location).ProductVersion, Title = "About" , Logo = new Bitmap(Icon)}.ShowDialog(this);
 
+
+            #region file buttons
+
+            var fileNew = new Command { MenuText = "&New", Shortcut = Application.Instance.CommonModifier | Keys.N };
+            fileNew.Executed += Command_New;
+
+            var fileOpen = new Command { MenuText = "&Open", Shortcut = Application.Instance.CommonModifier | Keys.O };
+            var fileSave = new Command { MenuText = "&Save", Shortcut = Application.Instance.CommonModifier | Keys.S, Enabled = CanSave };
+
+            var fileRun = new Command { MenuText = "&Run Game", Shortcut = Keys.F5, Enabled = CanSave };
+            var fileDebug = new Command { MenuText = "Run under &debugger", Shortcut = Keys.Shift | Keys.F5, Enabled = CanSave };
+           
+            var fileOffset = new Command { MenuText = "Generate o&ffset map", Enabled = CanSave };
+            
+            var fileSettings = new Command { MenuText = "Settings", Shortcut = Keys.F4 };
+            #endregion
+
+            
+
             // create menu
             Menu = new MenuBar
             {
@@ -170,22 +136,22 @@ namespace UndertaleModToolEto
                         Text = "&File",
                         Items =
                         {
-                            new Command { MenuText = "&New", Shortcut = Application.Instance.CommonModifier | Keys.N },
-                            new Command { MenuText = "&Open", Shortcut = Application.Instance.CommonModifier | Keys.O },
-                            new Command { MenuText = "&Save", Shortcut = Application.Instance.CommonModifier | Keys.S, Enabled = CanSave},
-                            new SeparatorMenuItem { },
-                            new Command { MenuText = "&Run Game", Shortcut = Keys.F5, Enabled = CanSave },
-                            new Command { MenuText = "Run under &debugger", Shortcut = Keys.Shift | Keys.F5, Enabled = CanSave },
-                            new SeparatorMenuItem { },
-                            new Command { MenuText = "Generate o&ffset map", Enabled = CanSave },
-                            new SeparatorMenuItem { },
-                            new Command { MenuText = "Settings", Shortcut = Keys.F4 },
+                             fileNew,
+                             fileOpen,
+                             fileSave,
+                             new SeparatorMenuItem { },
+                             fileRun,
+                             fileDebug,
+                             new SeparatorMenuItem { },
+                             fileOffset,
+                             new SeparatorMenuItem { },
+                             fileSettings
                         }
                     },
                     // Scripts submenu
 					new ButtonMenuItem
                     {
-                        Text = "&Sripts",
+                        Text = "&Scripts",
                         Items =
                         {
                             new ButtonMenuItem
@@ -217,8 +183,6 @@ namespace UndertaleModToolEto
                             new Command { MenuText = "&GitHub"}
                         }
                     }
-					// new ButtonMenuItem { Text = "&Edit", Items = { /* commands/items */ } },
-					// new ButtonMenuItem { Text = "&View", Items = { /* commands/items */ } },
 				},
                 
                 /*ApplicationItems =
@@ -231,9 +195,66 @@ namespace UndertaleModToolEto
             };
         }
 
-        private void MainWindow_MouseDoubleClick(object sender, MouseEventArgs e)
+        private Label objectLabel = new Label();
+
+        private void Command_New(object sender, EventArgs e)
         {
-            int val = 3;
+            if (Data != null)
+            {
+                if (MessageBox.Show("Warning: you currently have a project open.\nAre you sure you want to make a new project?", "UndertaleModTool", MessageBoxButtons.YesNo, MessageBoxType.Warning) == DialogResult.No)
+                    return;
+            }
+
+            FilePath = null;
+            Data = UndertaleData.CreateNew();
+            CloseChildFiles();
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Data"));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("IsGMS2"));
+            ChangeSelection(Highlighted = new DescriptionView("Welcome to UndertaleModTool!", "New file created, have fun making a game out of nothing\nI TOLD YOU to open data.win, not create a new file! :P"));
+            SelectionHistory.Clear();
+
+            CanSave = true;
+            CanSafelySave = true;
         }
+
+        public void CloseChildFiles()
+        {
+            foreach (var pair in childFiles)
+            {
+                pair.Value.Close();
+            }
+            childFiles.Clear();
+        }
+
+        public void ChangeSelection(object newsel)
+        {
+            SelectionHistory.Add(Selected);
+            Selected = newsel;
+            UpdateObjectLabel(newsel);
+        }
+
+        private void UpdateObjectLabel(object obj)
+        {
+            int foundIndex = obj is UndertaleNamedResource ? Data.IndexOf(obj as UndertaleNamedResource, false) : -1;
+            SetIDString(foundIndex == -1 ? "None" : (foundIndex == -2 ? "N/A" : Convert.ToString(foundIndex)));
+        }
+
+        private void SetIDString(string str)
+        {
+            objectLabel.Text = str;
+        }
+
+        public class DescriptionView
+        {
+            public string Heading { get; private set; }
+            public string Description { get; private set; }
+
+            public DescriptionView(string heading, string description)
+            {
+                Heading = heading;
+                Description = description;
+            }
+        }
+
     }
 }

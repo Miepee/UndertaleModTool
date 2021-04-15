@@ -26,14 +26,17 @@ namespace UndertaleModToolEto
 	/// any other visual representation.
 	/// </summary>
 	public class Section : List<Section>, ISectionName
-	{
-		public string Text { get; set; }
+	{ 
+
+        public string Text { get; set; }
 
 		public Section()
 		{
 		}
 
-		public Section(string text, IEnumerable<Section> sections) : base(sections)
+
+
+		public Section(string text, IEnumerable<Section> sections = null) : base(sections ?? new List<Section>())
 		{
 			this.Text = text;
 		}

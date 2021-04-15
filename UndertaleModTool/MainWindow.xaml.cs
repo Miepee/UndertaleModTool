@@ -1266,7 +1266,6 @@ namespace UndertaleModTool
         public UndertaleGeneralInfo GeneralInfo { get; private set; }
         public UndertaleOptions Options { get; private set; }
         public UndertaleLanguage Language { get; private set; }
-
         public GeneralInfoEditor(UndertaleGeneralInfo generalInfo, UndertaleOptions options, UndertaleLanguage language)
         {
             this.GeneralInfo = generalInfo;
