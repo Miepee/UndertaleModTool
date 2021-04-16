@@ -9,7 +9,7 @@ using System.Text;
 
 namespace UndertaleModToolEto.Windows
 {
-    public partial class LoaderDialog : Dialog
+    public partial class LoaderDialog : Dialog, INotifyPropertyChanged
     {
 
         private string _Message;
@@ -33,12 +33,6 @@ namespace UndertaleModToolEto.Windows
                     ProgressBar.MaxValue = (int)value.Value;
             }
         }
-
-        private string headerText = "Loading!";
-
-        private string descriptionText = "Dummy!";
-
-        private string title = "Loading";
 
         private Label headerLabel;
 
@@ -82,9 +76,9 @@ namespace UndertaleModToolEto.Windows
         public LoaderDialog(string title, string message) : this()
         {
             Title = title;
-            headerText = message;
+            Message = message;
 
-            headerLabel.Text = headerText;
+            headerLabel.Text = Message;
 
             listener = new DebugTraceListener(this);
             Trace.Listeners.Add(listener);

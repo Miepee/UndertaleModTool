@@ -13,10 +13,11 @@ using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using System.IO;
 using UndertaleModToolEto.Windows;
+using UndertaleModLib.Scripting;
 
 namespace UndertaleModToolEto
 {
-    public partial class MainWindow : Form
+    public partial class MainWindow : Form, INotifyPropertyChanged
     {
         public UndertaleData Data { get; set; }
         public string FilePath { get; set; }
@@ -40,7 +41,7 @@ namespace UndertaleModToolEto
         public bool FinishedMessageEnabled = true;
 
         public event PropertyChangedEventHandler PropertyChanged;
-        private LoaderDialog scriptDialog;        //TODO: this is a custom form, needs to be implemented
+        private LoaderDialog scriptDialog;
 
         public Dictionary<string, NamedPipeServerStream> childFiles = new Dictionary<string, NamedPipeServerStream>();
 
@@ -57,6 +58,8 @@ namespace UndertaleModToolEto
 
             var treeDataHead = new List<Section>();
             var nodes = new List<Section>();
+
+            var foo = Data;
 
             nodes.Add(new Section("General info"));
             nodes.Add(new Section("Global init"));
@@ -93,18 +96,13 @@ namespace UndertaleModToolEto
                 SplitterWidth = 5,
                 Position = 161,
                 Panel1MinimumSize = 15,
-                //TODO: add a minimum size of panel2
+                Panel2MinimumSize = 15,
                 Panel1 = DataList.Control,
                 Panel2 = new Panel { }
             };
             
 
-            // create a few commands that can be used for the menu and toolbar
-            var clickMe = new Command { MenuText = "Click Me!", ToolBarText = "Click Me!" };
-            clickMe.Executed += (sender, e) => MessageBox.Show(this, "I was clicked!");
-
-            var quitCommand = new Command { MenuText = "Quit", Shortcut = Application.Instance.CommonModifier | Keys.Q };
-            quitCommand.Executed += (sender, e) => Application.Instance.Quit();
+            
 
             var aboutCommand = new Command { MenuText = "About..." };
             aboutCommand.Executed += (sender, e) => new AboutDialog() { ProgramDescription = "A tool that lets you modify Game Maker: Studio files", WebsiteLabel = "Source Code", Website = new Uri("https://github.com/krzys-h/UndertaleModTool"), ProgramName = "UndertaleModTool by krzys_h v" , Version = FileVersionInfo.GetVersionInfo(Assembly.GetExecutingAssembly().Location).ProductVersion, Title = "About" , Logo = new Bitmap(Icon)}.ShowDialog(this);
@@ -126,9 +124,12 @@ namespace UndertaleModToolEto
             var fileOffset = new Command { MenuText = "Generate o&ffset map", Enabled = CanSave };
             
             var fileSettings = new Command { MenuText = "Settings", Shortcut = Keys.F4 };
+
+            var quitCommand = new Command { MenuText = "Quit", Shortcut = Application.Instance.CommonModifier | Keys.Q };
+            quitCommand.Executed += (sender, e) => Application.Instance.Quit();
             #endregion
 
-            
+
 
             // create menu
             Menu = new MenuBar
@@ -353,6 +354,11 @@ namespace UndertaleModToolEto
 
                     Application.Instance.Invoke(new Action(() =>
                     {
+                        //foreach()
+                        //DataList = new SectionListTreeGridView(null);
+
+                        ((Splitter)Content).Panel1 = DataList.Control;
+
                         dialog.Close();
                     }));
                 });
