@@ -10,6 +10,9 @@ using System.Globalization;
 using System.Collections.Generic;
 using System.IO.Pipes;
 using System.Collections.ObjectModel;
+using System.Threading.Tasks;
+using System.IO;
+using UndertaleModToolEto.Windows;
 
 namespace UndertaleModToolEto
 {
@@ -37,7 +40,7 @@ namespace UndertaleModToolEto
         public bool FinishedMessageEnabled = true;
 
         public event PropertyChangedEventHandler PropertyChanged;
-        //private LoaderDialog scriptDialog;        //TODO: this is a custom form, needs to be implemented
+        private LoaderDialog scriptDialog;        //TODO: this is a custom form, needs to be implemented
 
         public Dictionary<string, NamedPipeServerStream> childFiles = new Dictionary<string, NamedPipeServerStream>();
 
@@ -113,6 +116,8 @@ namespace UndertaleModToolEto
             fileNew.Executed += Command_New;
 
             var fileOpen = new Command { MenuText = "&Open", Shortcut = Application.Instance.CommonModifier | Keys.O };
+            fileOpen.Executed += Command_Open;
+
             var fileSave = new Command { MenuText = "&Save", Shortcut = Application.Instance.CommonModifier | Keys.S, Enabled = CanSave };
 
             var fileRun = new Command { MenuText = "&Run Game", Shortcut = Keys.F5, Enabled = CanSave };
@@ -254,6 +259,106 @@ namespace UndertaleModToolEto
                 Heading = heading;
                 Description = description;
             }
+        }
+
+        private void Command_Open(object sender, EventArgs e)
+        {
+            DoOpenDialog();
+        }
+
+        private async Task<bool> DoOpenDialog()
+        {
+            OpenFileDialog dlg = new OpenFileDialog()
+            {
+                Filters =
+                {
+                    new FileFilter("Game Maker Studio data files", ".win", ".unx", ".ios", ".audiogroup", ".dat"),
+                    new FileFilter("All Files", "")
+                }
+            };
+
+            if (dlg.ShowDialog(this) != DialogResult.Abort)
+            {
+                //TODO: implement this!!!
+                await LoadFile(dlg.FileName);
+                return true;
+            }
+            return false;
+        }
+
+        private async Task LoadFile(string filename)
+        {
+            LoaderDialog dialog = new LoaderDialog("Loading", "Loading, please wait...");
+            dialog.Owner = this;
+            Task t = Task.Run(() =>
+            {
+                bool hadWarnings = false;
+                UndertaleData data = null;
+                try
+                {
+                    using (var stream = new FileStream(filename, FileMode.Open, FileAccess.Read))
+                    {
+                        data = UndertaleIO.Read(stream, warning =>
+                        {
+                            MessageBox.Show(warning, "Loading warning", MessageBoxButtons.OK, MessageBoxType.Warning);
+                            hadWarnings = true;
+                        });
+                    }
+                }
+                catch (Exception e)
+                {
+                    MessageBox.Show("An error occured while trying to load:\n" + e.Message, "Load error", MessageBoxButtons.OK, MessageBoxType.Error);
+                }
+
+                Task.Run(() =>
+                {
+                    if (data != null)
+                    {
+                        if (data.UnsupportedBytecodeVersion)
+                        {
+                            MessageBox.Show("Only bytecode versions 14 to 17 are supported for now, you are trying to load " + data.GeneralInfo.BytecodeVersion + ". A lot of code is disabled and will likely break something. Saving/exporting is disabled.",
+                                "Unsupported bytecode version", MessageBoxButtons.OK, MessageBoxType.Warning);
+                            CanSave = false;
+                            CanSafelySave = false;
+                        }
+                        else if (hadWarnings)
+                        {
+                            MessageBox.Show("Warnings occurred during loading. Data loss will likely occur when trying to save!", "Loading problems", MessageBoxButtons.OK, MessageBoxType.Warning);
+                            CanSave = true;
+                            CanSafelySave = false;
+                        }
+                        else
+                        {
+                            CanSave = true;
+                            CanSafelySave = true;
+                        }
+                        if (data.GMS2_3)
+                        {
+                            MessageBox.Show("This game was built using GameMaker Studio 2.3 (or above). Support for this version is a work in progress, and you will likely run into issues decompiling code or in other places.", "GMS 2.3", MessageBoxButtons.OK, MessageBoxType.Warning);
+                        }
+                        if (data.IsYYC())
+                        {
+                            MessageBox.Show("This game uses YYC (YoYo Compiler), which means the code is embedded into the game executable. This configuration is currently not fully supported; continue at your own risk.", "YYC", MessageBoxButtons.OK, MessageBoxType.Warning);
+                        }
+                        if (System.IO.Path.GetDirectoryName(FilePath) != System.IO.Path.GetDirectoryName(filename))
+                            CloseChildFiles();
+                        this.Data = data;
+                        this.FilePath = filename;
+                        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Data"));
+                        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("FilePath"));
+                        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("IsGMS2"));
+                        ChangeSelection(Highlighted = new DescriptionView("Welcome to UndertaleModTool!", "Double click on the items on the left to view them!"));
+                        SelectionHistory.Clear();
+                    }
+
+                    Application.Instance.Invoke(new Action(() =>
+                    {
+                        dialog.Close();
+                    }));
+                });
+            });
+            dialog.ShowModal();
+            await t;
         }
 
     }
