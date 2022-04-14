@@ -2,12 +2,35 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Diagnostics;
+using System.Globalization;
+using System.IO;
+using System.IO.Pipes;
+using System.Linq;
+using System.Net;
+using System.Net.Http;
+using System.Reflection;
+using System.Runtime;
+using System.Runtime.InteropServices;
+using System.Text;
+using System.Text.RegularExpressions;
+using System.Threading;
+using System.Threading.Tasks;
 using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Interactivity;
+using Avalonia.Markup.Xaml.Templates;
+using Avalonia.Media.Imaging;
 using Avalonia.Xaml.Interactivity;
+using AvaloniaEdit;
+using Microsoft.CodeAnalysis.Scripting;
+using Microsoft.Win32;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using UndertaleModLib;
+using UndertaleModLib.Decompiler;
 using UndertaleModLib.Models;
+using UndertaleModLib.ModelsDebug;
 using UndertaleModLib.Scripting;
 
 
@@ -37,134 +60,109 @@ namespace UndertaleModToolAvalonia
             this.Selected = newsel;
             this.AutoClose = false;
             TabControl tabControl = ((TabControl) MainWindow.FindName("TabController"));
-            if (newsel is DescriptionView)
+            switch (newsel)
             {
+                case DescriptionView view:
+                {
+                    this.AutoClose = true;
+                    if (view.Heading.Contains("Welcome"))
+                    {
+                        this.TabTitle = "Welcome!";
+                    }
+                    else
+                    {
+                        this.TabTitle = view.Heading;
+                    }
 
-                this.AutoClose = true;
-                if (((DescriptionView) newsel).Heading.Contains("Welcome"))
-                {
-                    this.TabTitle = "Welcome!";
+                    break;
                 }
-                else
-                {
-                    this.TabTitle = ((DescriptionView) newsel).Heading;
-                }
-            }
-            else if (newsel is UndertaleAudioGroup)
-            {
-                this.TabTitle = String.Format("Audio Group Editor - {0}", ((UndertaleAudioGroup) newsel).Name.Content);
-            }
-            else if (newsel is UndertaleSound)
-            {
-                this.TabTitle = String.Format("Sound Editor - {0}", ((UndertaleSound) newsel).Name.Content);
-            }
-            else if (newsel is UndertaleSprite)
-            {
-                this.TabTitle = String.Format("Sprite Editor - {0}", ((UndertaleSprite) newsel).Name.Content);
-            }
-            else if (newsel is UndertaleBackground)
-            {
-                this.TabTitle = String.Format("Background Editor - {0}", ((UndertaleBackground) newsel).Name.Content);
-            }
-            else if (newsel is UndertalePath)
-            {
-                this.TabTitle = String.Format("Path Editor - {0}", ((UndertalePath) newsel).Name.Content);
-            }
-            else if (newsel is UndertaleScript)
-            {
-                this.TabTitle = String.Format("Script Editor - {0}", ((UndertaleScript) newsel).Name.Content);
-            }
-            else if (newsel is UndertaleShader)
-            {
-                this.TabTitle = String.Format("Shader Editor - {0}", ((UndertaleShader) newsel).Name.Content);
-            }
-            else if (newsel is UndertaleFont)
-            {
-                this.TabTitle = String.Format("Font Editor - {0}", ((UndertaleFont) newsel).Name.Content);
-            }
-            else if (newsel is UndertaleTimeline)
-            {
-                this.TabTitle = String.Format("Timeline Editor - {0}", ((UndertaleTimeline) newsel).Name.Content);
-            }
-            else if (newsel is UndertaleGameObject)
-            {
-                this.TabTitle = String.Format("Game Object Editor - {0}", ((UndertaleGameObject) newsel).Name.Content);
-            }
-            else if (newsel is UndertaleRoom)
-            {
-                this.TabTitle = String.Format("Room Editor - {0}", ((UndertaleRoom) newsel).Name.Content);
-            }
-            else if (newsel is UndertaleExtension)
-            {
-                this.TabTitle = String.Format("Extension Editor - {0}", ((UndertaleExtension) newsel).Name.Content);
-            }
-            else if (newsel is UndertaleTexturePageItem)
-            {
-                this.TabTitle = String.Format("Texture Page Item Editor - {0}", ((UndertaleTexturePageItem) newsel).Name.Content);
-            }
-            else if (newsel is UndertaleCode)
-            {
-                this.TabTitle = String.Format("Code Editor - {0}", ((UndertaleCode) newsel).Name.Content);
-            }
-            else if (newsel is UndertaleVariable)
-            {
-                this.TabTitle = String.Format("Variable Editor - {0}", ((UndertaleVariable) newsel).Name.Content);
-            }
-            else if (newsel is UndertaleFunction)
-            {
-                this.TabTitle = String.Format("Function Editor - {0}", ((UndertaleFunction) newsel).Name.Content);
-            }
-            else if (newsel is UndertaleCodeLocals)
-            {
-                this.TabTitle = String.Format("Code Locals Editor - {0}", ((UndertaleCodeLocals) newsel).Name.Content);
-            }
-            else if (newsel is UndertaleString)
-            {
-                this.TabTitle = String.Format("String Editor - {0}", ((UndertaleString) newsel).Content);
-            }
-            else if (newsel is UndertaleEmbeddedTexture)
-            {
-                this.TabTitle = String.Format("Embedded Texture Editor - {0}", ((UndertaleEmbeddedTexture) newsel).Name.Content);
-            }
-            else if (newsel is UndertaleEmbeddedAudio)
-            {
-                this.TabTitle = String.Format("Embedded Audio Editor - {0}", ((UndertaleEmbeddedAudio) newsel).Name.Content);
-            }
-            else if (newsel is UndertaleTextureGroupInfo)
-            {
-                this.TabTitle = String.Format("Texture Group Info Editor - {0}", ((UndertaleTextureGroupInfo) newsel).Name.Content);
-            }
-            else if (newsel is UndertaleEmbeddedImage)
-            {
-                this.TabTitle = String.Format("Embedded Image Editor - {0}", ((UndertaleEmbeddedImage) newsel).Name.Content);
-            }
-            else if (newsel is UndertaleSequence)
-            {
-                this.TabTitle = String.Format("Sequence Editor - {0}", ((UndertaleSequence) newsel).Name.Content);
-            }
-            else if (newsel is UndertaleAnimationCurve)
-            {
-                this.TabTitle = String.Format("Animation Curve Editor - {0}", ((UndertaleAnimationCurve) newsel).Name.Content);
-            }
-            else if (newsel is UndertaleChunkVARI)
-            {
-                this.TabTitle = "Variables Overview";
-            }
-            else if (newsel is GeneralInfoEditor)
-            {
-                this.TabTitle = "General Info Editor";
-            }
-            else if (newsel is GlobalInitEditor)
-            {
-                this.TabTitle = "Global Init Editor";
-            }
-            else if (newsel is GameEndEditor)
-            {
-                this.TabTitle = "Game End Editor";
-            }
-            else
-            {
-                Debug.WriteLine(String.Format("Could not handle type {0}", newsel.GetType()));
+                case UndertaleAudioGroup group:
+                    this.TabTitle = $"Audio Group Editor - {@group.Name.Content}";
+                    break;
+                case UndertaleSound sound:
+                    this.TabTitle = $"Sound Editor - {sound.Name.Content}";
+                    break;
+                case UndertaleSprite sprite:
+                    this.TabTitle = $"Sprite Editor - {sprite.Name.Content}";
+                    break;
+                case UndertaleBackground background:
+                    this.TabTitle = $"Background Editor - {background.Name.Content}";
+                    break;
+                case UndertalePath path:
+                    this.TabTitle = $"Path Editor - {path.Name.Content}";
+                    break;
+                case UndertaleScript script:
+                    this.TabTitle = $"Script Editor - {script.Name.Content}";
+                    break;
+                case UndertaleShader shader:
+                    this.TabTitle = $"Shader Editor - {shader.Name.Content}";
+                    break;
+                case UndertaleFont font:
+                    this.TabTitle = $"Font Editor - {font.Name.Content}";
+                    break;
+                case UndertaleTimeline timeline:
+                    this.TabTitle = $"Timeline Editor - {timeline.Name.Content}";
+                    break;
+                case UndertaleGameObject gameObject:
+                    this.TabTitle = $"Game Object Editor - {gameObject.Name.Content}";
+                    break;
+                case UndertaleRoom room:
+                    this.TabTitle = $"Room Editor - {room.Name.Content}";
+                    break;
+                case UndertaleExtension extension:
+                    this.TabTitle = $"Extension Editor - {extension.Name.Content}";
+                    break;
+                case UndertaleTexturePageItem item:
+                    this.TabTitle = $"Texture Page Item Editor - {item.Name.Content}";
+                    break;
+                case UndertaleCode code:
+                    this.TabTitle = $"Code Editor - {code.Name.Content}";
+                    break;
+                case UndertaleVariable variable:
+                    this.TabTitle = $"Variable Editor - {variable.Name.Content}";
+                    break;
+                case UndertaleFunction function:
+                    this.TabTitle = $"Function Editor - {function.Name.Content}";
+                    break;
+                case UndertaleCodeLocals locals:
+                    this.TabTitle = $"Code Locals Editor - {locals.Name.Content}";
+                    break;
+                case UndertaleString undertaleString:
+                    this.TabTitle = $"String Editor - {undertaleString.Content}";
+                    break;
+                case UndertaleEmbeddedTexture texture:
+                    this.TabTitle = $"Embedded Texture Editor - {texture.Name.Content}";
+                    break;
+                case UndertaleEmbeddedAudio audio:
+                    this.TabTitle = $"Embedded Audio Editor - {audio.Name.Content}";
+                    break;
+                case UndertaleTextureGroupInfo info:
+                    this.TabTitle = $"Texture Group Info Editor - {info.Name.Content}";
+                    break;
+                case UndertaleEmbeddedImage image:
+                    this.TabTitle = $"Embedded Image Editor - {image.Name.Content}";
+                    break;
+                case UndertaleSequence sequence:
+                    this.TabTitle = $"Sequence Editor - {sequence.Name.Content}";
+                    break;
+                case UndertaleAnimationCurve curve:
+                    this.TabTitle = $"Animation Curve Editor - {curve.Name.Content}";
+                    break;
+                case UndertaleChunkVARI:
+                    this.TabTitle = "Variables Overview";
+                    break;
+                case GeneralInfoEditor:
+                    this.TabTitle = "General Info Editor";
+                    break;
+                case GlobalInitEditor:
+                    this.TabTitle = "Global Init Editor";
+                    break;
+                case GameEndEditor:
+                    this.TabTitle = "Game End Editor";
+                    break;
+                default:
+                    Debug.WriteLine(String.Format("Could not handle type {0}", newsel.GetType()));
+                    break;
             }
 
             TabItem tabItem = (TabItem) tabControl.Items[MainWindow.CurrentTabIndex];
@@ -188,8 +186,8 @@ namespace UndertaleModToolAvalonia
         public string FilePath { get; set; }
         public string ScriptPath { get; set; } // For the scripting interface specifically
 
-        private BitmapImage CloseButton = new BitmapImage(new Uri(@"/Resources/X.png", UriKind.RelativeOrAbsolute));
-        private BitmapImage CloseButtonHover = new BitmapImage(new Uri(@"/Resources/X_Down.png", UriKind.RelativeOrAbsolute));
+        private Bitmap CloseButton = new Bitmap(new Uri(@"/Resources/X.png", UriKind.RelativeOrAbsolute));
+        private Bitmap CloseButtonHover = new Bitmap(new Uri(@"/Resources/X_Down.png", UriKind.RelativeOrAbsolute));
 
         public string TitleMain { get; set; }
 
@@ -200,9 +198,9 @@ namespace UndertaleModToolAvalonia
         public object Highlighted { get { return ((Tab)CurrentTab).Highlighted; } set { OpenInNewTab(value, "Untitled"); } }
         public object Selected { get { return ((Tab)CurrentTab).Selected; } set { OpenInNewTab(value, "Untitled"); } }
 
-        public Visibility IsGMS2 => (Data?.GeneralInfo?.Major ?? 0) >= 2 ? Visibility.Visible : Visibility.Collapsed;
+        public bool IsGMS2 => (Data?.GeneralInfo?.Major ?? 0) >= 2 ? true : false;
         // God this is so ugly, if there's a better way, please, put in a pull request
-        public Visibility IsExtProductIDEligible => (((Data?.GeneralInfo?.Major ?? 0) >= 2) || (((Data?.GeneralInfo?.Major ?? 0) == 1) && (((Data?.GeneralInfo?.Build ?? 0) >= 1773) || ((Data?.GeneralInfo?.Build ?? 0) == 1539)))) ? Visibility.Visible : Visibility.Collapsed;
+        public bool IsExtProductIDEligible => (((Data?.GeneralInfo?.Major ?? 0) >= 2) || (((Data?.GeneralInfo?.Major ?? 0) == 1) && (((Data?.GeneralInfo?.Build ?? 0) >= 1773) || ((Data?.GeneralInfo?.Build ?? 0) == 1539)))) ? Visibility.Visible : Visibility.Collapsed;
         public bool CanSave { get; set; }
         public bool CanSafelySave = false;
         public bool WasWarnedAboutTempRun = false;
@@ -328,6 +326,7 @@ namespace UndertaleModToolAvalonia
             ((Label)this.FindName("ObjectLabel")).Content = str;
         }
 
+        //TODO: find out for what this is needed, this will not work cross platform likely
         [DllImport("shell32.dll")]
         static extern void SHChangeNotify(long wEventId, uint uFlags, IntPtr dwItem1, IntPtr dwItem2);
         const long SHCNE_ASSOCCHANGED = 0x08000000;
@@ -625,7 +624,6 @@ namespace UndertaleModToolAvalonia
         public async Task<bool> DoOpenDialog()
         {
             OpenFileDialog dlg = new OpenFileDialog();
-
             dlg.DefaultExt = "win";
             dlg.Filter = "Game Maker Studio data files (.win, .unx, .ios, .droid, audiogroup*.dat)|*.win;*.unx;*.ios;*.droid;audiogroup*.dat|All files|*";
 
@@ -640,11 +638,10 @@ namespace UndertaleModToolAvalonia
         {
             SaveFileDialog dlg = new SaveFileDialog();
 
-            dlg.DefaultExt = "win";
+            dlg.DefaultExtension = "win";
             dlg.Filter = "Game Maker Studio data files (.win, .unx, .ios, .droid, audiogroup*.dat)|*.win;*.unx;*.ios;*.droid;audiogroup*.dat|All files|*";
-            dlg.FileName = FilePath;
-
-            if (dlg.ShowDialog(this) == true)
+            dlg.InitialFileName = FilePath;
+            if (dlg.Show(this) == true)
             {
                 await SaveFile(dlg.FileName, suppressDebug);
                 return true;
