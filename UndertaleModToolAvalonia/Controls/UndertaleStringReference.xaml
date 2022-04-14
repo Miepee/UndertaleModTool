@@ -1,0 +1,57 @@
+﻿<controls:UserControl x:Class="UndertaleModTool.UndertaleStringReference"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:controls="https://github.com/avaloniaui"
+             mc:Ignorable="d"
+             d:DesignHeight="20" d:DesignWidth="300">
+    <controls:Grid>
+        <controls:Grid.ColumnDefinitions>
+            <controls:ColumnDefinition Width="*"/>
+            <controls:ColumnDefinition Width="Auto"/>
+        </controls:Grid.ColumnDefinitions>
+        <controls:TextBox controls:Grid.Column="0" controls:ToolTip="This is an string reference. Change the value here to edit this just this value of all referenced values, or drag and drop another string instance from the tree on the left to change the reference" AllowDrop="True" PreviewDragOver="TextBox_DragOver" PreviewDrop="TextBox_Drop" Text="{Binding ObjectReference.Content, RelativeSource={RelativeSource AncestorType=UserControl}, UpdateSourceTrigger=Explicit}" LostFocus="TextBox_LostFocus">
+            <controls:TextBox.Style>
+                <controls:Style TargetType="{x:Type controls:TextBox}">
+                    <controls:Style.Resources>
+                        <controls:VisualBrush x:Key="EmptyBrush" AlignmentX="Left" AlignmentY="Top" Stretch="None">
+                            <controls:VisualBrush.Visual>
+                                <controls:Label Padding="2, 0" Content="(empty)" Foreground="DarkGray"/>
+                            </controls:VisualBrush.Visual>
+                        </controls:VisualBrush>
+                        <controls:VisualBrush x:Key="NullBrush" AlignmentX="Left" AlignmentY="Top" Stretch="None">
+                            <controls:VisualBrush.Visual>
+                                <controls:Label Padding="2, 0" Content="(null)" Foreground="DarkGray"/>
+                            </controls:VisualBrush.Visual>
+                        </controls:VisualBrush>
+                    </controls:Style.Resources>
+                    <controls:Style.Triggers>
+                        <controls:Trigger Property="Text" Value="">
+                            <Setter Property="Background" Value="{StaticResource EmptyBrush}"/>
+                        </controls:Trigger>
+
+                        <MultiDataTrigger>
+                            <MultiDataTrigger.Conditions>
+                                <Condition Binding="{Binding ObjectReference, RelativeSource={controls:RelativeSource AncestorType={x:Type controls:UserControl}}}" Value="{x:Null}"/>
+                                <Condition Binding="{Binding Text, RelativeSource={RelativeSource Self}}" Value=""/>
+                            </MultiDataTrigger.Conditions>
+                            <controls:Setter Property="Background" Value="{StaticResource NullBrush}"/>
+                        </MultiDataTrigger>
+                    </controls:Style.Triggers>
+                </controls:Style>
+            </controls:TextBox.Style>
+        </controls:TextBox>
+        <controls:Button controls:Grid.Column="1" Click="Details_Click" Content=" ... " ToolTip="Open referenced object">
+            <controls:Button.Style>
+                <controls:Style TargetType="{x:Type controls:Button}">
+                    <controls:Style.Triggers>
+                        <DataTrigger Binding="{controls:Binding ObjectReference, RelativeSource={RelativeSource AncestorType={x:Type controls:UserControl}}}" Value="{x:Null}">
+                            <controls:Setter Property="IsEnabled" Value="False"/>
+                        </DataTrigger>
+                    </controls:Style.Triggers>
+                </controls:Style>
+            </controls:Button.Style>
+        </controls:Button>
+    </controls:Grid>
+</controls:UserControl>
