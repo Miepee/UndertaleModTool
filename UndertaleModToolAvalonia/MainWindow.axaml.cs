@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -9,20 +10,27 @@ using System.IO.Pipes;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Reflection;
 using System.Runtime;
 using System.Runtime.InteropServices;
+using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using Avalonia.Controls;
+using Avalonia.Data;
 using Avalonia.Input;
 using Avalonia.Interactivity;
+using Avalonia.Layout;
 using Avalonia.Markup.Xaml.Templates;
 using Avalonia.Media.Imaging;
+using Avalonia.Threading;
 using Avalonia.Xaml.Interactivity;
 using AvaloniaEdit;
+using MessageBox.Avalonia.Enums;
+using Microsoft.CodeAnalysis.CSharp.Scripting;
 using Microsoft.CodeAnalysis.Scripting;
 using Microsoft.Win32;
 using Newtonsoft.Json;
@@ -32,6 +40,8 @@ using UndertaleModLib.Decompiler;
 using UndertaleModLib.Models;
 using UndertaleModLib.ModelsDebug;
 using UndertaleModLib.Scripting;
+using UndertaleModTool;
+using UndertaleModTool.Windows;
 
 
 namespace UndertaleModToolAvalonia
@@ -566,7 +576,7 @@ namespace UndertaleModToolAvalonia
         {
             if (Data != null)
             {
-                if (MessageBox.Show("Warning: you currently have a project open.\nAre you sure you want to make a new project?", "UndertaleModTool", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.No)
+                if (MessageBox.Show("Warning: you currently have a project open.\nAre you sure you want to make a new project?", "UndertaleModTool", MessageBoxButton.YesNo, MessageBoxImage.Warning) == ButtonResult.No)
                     return false;
             }
             this.Dispatcher.Invoke(() =>
@@ -609,12 +619,12 @@ namespace UndertaleModToolAvalonia
 
                     if (fileext == ".csx")
                     {
-                        if (MessageBox.Show($"Run {filepath} as a script?", "Question", MessageBoxButton.YesNo, MessageBoxImage.Question, MessageBoxResult.No) == MessageBoxResult.Yes)
+                        if (MessageBox.Show($"Run {filepath} as a script?", "Question", MessageBoxButton.YesNo, MessageBoxImage.Question, MessageBoxResult.No) == ButtonResult.Yes)
                             await RunScript(filepath);
                     }
                     else if (IFF_EXTENSIONS.Contains(fileext) || fileext == ".dat" /* audiogroup */)
                     {
-                        if (MessageBox.Show($"Open {filepath} as a data file?", "Question", MessageBoxButton.YesNo, MessageBoxImage.Question, MessageBoxResult.No) == MessageBoxResult.Yes)
+                        if (MessageBox.Show($"Open {filepath} as a data file?", "Question", MessageBoxButton.YesNo, MessageBoxImage.Question, MessageBoxResult.No) == ButtonResult.Yes)
                             await LoadFile(filepath, true);
                     }
                     // else, do something?
@@ -700,13 +710,13 @@ namespace UndertaleModToolAvalonia
 
                 if (SettingsWindow.WarnOnClose)
                 {
-                    if (ShowQuestion("Are you sure you want to quit?") == MessageBoxResult.Yes)
+                    if (ShowQuestion("Are you sure you want to quit?") == ButtonResult.Yes)
                     {
-                        if (ShowQuestion("Save changes first?") == MessageBoxResult.Yes)
+                        if (ShowQuestion("Save changes first?") == ButtonResult.Yes)
                         {
                             if (scriptDialog is not null)
                             {
-                                if (ShowQuestion("Script still runs. Save anyway?\nIt can corrupt the data file that you'll save.") == MessageBoxResult.Yes)
+                                if (ShowQuestion("Script still runs. Save anyway?\nIt can corrupt the data file that you'll save.") == ButtonResult.Yes)
                                     save = true;
                             }
                             else
@@ -737,7 +747,7 @@ namespace UndertaleModToolAvalonia
                 }
 
                 if (SettingsWindow.UseGMLCache && Data?.GMLCache?.Count > 0 && !Data.GMLCacheWasSaved && Data.GMLCacheIsReady)
-                    if (ShowQuestion("Save unedited code cache?") == MessageBoxResult.Yes)
+                    if (ShowQuestion("Save unedited code cache?") == ButtonResult.Yes)
                         await SaveGMLCache(FilePath, save);
 
                 CloseOtherWindows();
@@ -1520,7 +1530,7 @@ namespace UndertaleModToolAvalonia
             object source = container.ItemsSource;
             IList list = ((source as ICollectionView)?.SourceCollection as IList) ?? (source as IList);
             bool isLast = list.IndexOf(obj) == list.Count - 1;
-            if (MessageBox.Show("Delete " + obj.ToString() + "?" + (!isLast ? "\n\nNote that the code often references objects by ID, so this operation is likely to break stuff because other items will shift up!" : ""), "Confirmation", MessageBoxButton.YesNo, isLast ? MessageBoxImage.Question : MessageBoxImage.Warning) == MessageBoxResult.Yes)
+            if (MessageBox.Show("Delete " + obj.ToString() + "?" + (!isLast ? "\n\nNote that the code often references objects by ID, so this operation is likely to break stuff because other items will shift up!" : ""), "Confirmation", MessageBoxButton.YesNo, isLast ? MessageBoxImage.Question : MessageBoxImage.Warning) == ButtonResult.Yes)
             {
                 list.Remove(obj);
                 if (obj is UndertaleCode codeObj)
@@ -2208,7 +2218,7 @@ namespace UndertaleModToolAvalonia
         public bool ScriptQuestion(string message)
         {
             PlayInformationSound();
-            return MessageBox.Show(message, "Script message", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes;
+            return MessageBox.Show(message, "Script message", MessageBoxButton.YesNo, MessageBoxImage.Question) == ButtonResult.Yes;
         }
         public void ScriptWarning(string message)
         {
@@ -2452,7 +2462,7 @@ namespace UndertaleModToolAvalonia
             {
                 if (ShowQuestion("Your operating system is 32-bit.\n" +
                                  "32-bit (x86) version of UndertaleModTool is obsolete.\n" +
-                                 "Do you want to continue anyway?", MessageBoxImage.Error) != MessageBoxResult.Yes)
+                                 "Do you want to continue anyway?", MessageBoxImage.Error) != ButtonResult.Yes)
                 {
                     window.UpdateButtonEnabled = true;
                     return;
@@ -2508,7 +2518,7 @@ namespace UndertaleModToolAvalonia
             DateTime currDate = File.GetLastWriteTime(Path.Combine(ExePath, "UndertaleModTool.exe"));
             DateTime lastDate = (DateTime)action["updated_at"];
             if (lastDate.Subtract(currDate).Minutes <= 10)
-                if (ShowQuestion("UndertaleModTool is already up to date.\nUpdate anyway?") != MessageBoxResult.Yes)
+                if (ShowQuestion("UndertaleModTool is already up to date.\nUpdate anyway?") != ButtonResult.Yes)
                 {
                     window.UpdateButtonEnabled = true;
                     return;
@@ -2530,7 +2540,7 @@ namespace UndertaleModToolAvalonia
             {
                 if (ShowQuestion("Detected 32-bit (x86) version of UndertaleModTool on the 64-bit operating system.\n" +
                                  "It's highly recommended to use the 64-bit version instead.\n" +
-                                 "Download that?") != MessageBoxResult.Yes)
+                                 "Download that?") != ButtonResult.Yes)
                 {
                     window.UpdateButtonEnabled = true;
                     return;
@@ -2618,7 +2628,7 @@ namespace UndertaleModToolAvalonia
 
                                 if (isWin7)
                                 {
-                                    if (ShowQuestion(errMsg + win7upd, MessageBoxImage.Error) == MessageBoxResult.Yes)
+                                    if (ShowQuestion(errMsg + win7upd, MessageBoxImage.Error) == ButtonResult.Yes)
                                         OpenBrowser("https://www.microsoft.com/en-us/download/details.aspx?id=44622");
 
                                     window.UpdateButtonEnabled = true;
@@ -2777,7 +2787,7 @@ result in loss of work.");
             bool saveOk = true;
             if (!Data.GeneralInfo.DisableDebugger)
             {
-                if (ShowQuestion("The game has the debugger enabled. Would you like to disable it so the game will run?") == MessageBoxResult.Yes)
+                if (ShowQuestion("The game has the debugger enabled. Would you like to disable it so the game will run?") == ButtonResult.Yes)
                 {
                     Data.GeneralInfo.DisableDebugger = true;
                     if (!await DoSaveDialog())
@@ -2796,7 +2806,7 @@ result in loss of work.");
             else
             {
                 Data.GeneralInfo.DisableDebugger = true;
-                if (ShowQuestion("Save changes first?") == MessageBoxResult.Yes)
+                if (ShowQuestion("Save changes first?") == ButtonResult.Yes)
                     saveOk = await DoSaveDialog();
             }
 

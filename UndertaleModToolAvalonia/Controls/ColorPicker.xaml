@@ -1,14 +1,16 @@
-﻿<UserControl x:Class="UndertaleModTool.ColorPicker"
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+﻿<UserControl x:Class="UndertaleModToolAvalonia.ColorPicker"
+             xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:UndertaleModTool"
-             mc:Ignorable="d" 
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:UndertaleModToolAvalonia"
+             xmlns:drawing="clr-namespace:System.Drawing;assembly=System.ComponentModel.TypeConverter"
+             xmlns:undertaleModToolAvalonia="clr-namespace:UndertaleModToolAvalonia"
+             mc:Ignorable="d"
              d:DesignHeight="20" d:DesignWidth="300">
     <UserControl.Resources>
-        <local:ColorConverter x:Key="ColorConverter"/>
-        <local:ColorTextConverter x:Key="ColorTextConverter"/>
+        <drawing:ColorConverter x:Key="ColorConverter"/>
+        <undertaleModToolAvalonia:ColorTextConverter x:Key="ColorTextConverter"/>
     </UserControl.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
@@ -24,7 +26,7 @@
             </Border>
         </Viewbox>
 
-        <TextBox Name="ColorText" Grid.Column="1" MaxLength="9" ToolTip="A, B, G, R"/>
+        <TextBox Name="ColorText" Grid.Column="1" MaxLength="9" ToolTip.Tip="A, B, G, R"/>
         <!-- "Text" binding is in the code of "ColorPicker" -->
     </Grid>
 </UserControl>

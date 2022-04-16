@@ -2,8 +2,6 @@
 using System.ComponentModel;
 using System.IO;
 using System.Threading;
-using System.Windows;
-using System.Windows.Threading;
 using UndertaleModLib;
 using UndertaleModLib.Scripting;
 using System.Security.Cryptography;
@@ -40,7 +38,7 @@ namespace UndertaleModToolAvalonia
             if (scriptDialog == null)
             {
                 scriptDialog = new LoaderDialog("Script in progress...", "Please wait...");
-                scriptDialog.Owner = this;
+                //scriptDialog.Owner = this;
                 scriptDialog.PreventClose = true;
             }
         }

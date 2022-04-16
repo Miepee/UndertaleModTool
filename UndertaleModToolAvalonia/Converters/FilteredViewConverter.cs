@@ -3,20 +3,17 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Data;
+using Avalonia;
+using Avalonia.Data.Converters;
 using UndertaleModLib;
 
 namespace UndertaleModToolAvalonia
 {
     [ValueConversion(typeof(object), typeof(ICollectionView))]
-    public class FilteredViewConverter : DependencyObject, IValueConverter
+    public class FilteredViewConverter : AvaloniaObject, IValueConverter
     {
-        public static DependencyProperty FilterProperty =
-            DependencyProperty.Register("Filter", typeof(string),
+        public static AvaloniaProperty FilterProperty =
+            AvaloniaProperty.Register<>("Filter", typeof(string),
                 typeof(FilteredViewConverter),
                 new FrameworkPropertyMetadata(null));
 

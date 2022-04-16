@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
+﻿using Avalonia;
+using Avalonia.Controls;
+using Avalonia.Media.Imaging;
 using static UndertaleModLib.Models.UndertaleRoom;
 
 namespace UndertaleModToolAvalonia
@@ -14,12 +8,12 @@ namespace UndertaleModToolAvalonia
     // source - https://stackoverflow.com/a/4801434/12136394
     public class TileLayerImage : Image
     {
-        private static readonly DependencyProperty LayerTilesDataProperty =
-            DependencyProperty.Register("LayerTilesData", typeof(Layer.LayerTilesData),
+        private static readonly AvaloniaProperty LayerTilesDataProperty =
+            AvaloniaProperty.Register<>("LayerTilesData", typeof(Layer.LayerTilesData),
                 typeof(TileLayerImage),
                 new FrameworkPropertyMetadata(null));
-        private static readonly DependencyProperty CheckTransparencyProperty =
-            DependencyProperty.Register("CheckTransparency", typeof(bool),
+        private static readonly AvaloniaProperty CheckTransparencyProperty =
+            AvaloniaProperty.Register<>("CheckTransparency", typeof(bool),
                 typeof(TileLayerImage),
                 new FrameworkPropertyMetadata(false));
 
@@ -36,11 +30,11 @@ namespace UndertaleModToolAvalonia
 
         protected override HitTestResult HitTestCore(PointHitTestParameters hitTestParameters)
         {
-            BitmapSource source = (BitmapSource)Source;
+            Bitmap source = (Bitmap)Source;
 
             // Get the pixel of the source that was hit
-            int x = (int)(hitTestParameters.HitPoint.X / ActualWidth * source.PixelWidth);
-            int y = (int)(hitTestParameters.HitPoint.Y / ActualHeight * source.PixelHeight);
+            int x = (int)(hitTestParameters.HitPoint.X / Width * source.PixelSize.Width);
+            int y = (int)(hitTestParameters.HitPoint.Y / Height * source.PixelSize.Height);
 
             if (CheckTransparency)
             {

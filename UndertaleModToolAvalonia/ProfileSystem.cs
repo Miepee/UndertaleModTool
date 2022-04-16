@@ -2,13 +2,12 @@
 using System.ComponentModel;
 using System.IO;
 using System.Threading;
-using System.Windows;
-using System.Windows.Threading;
 using UndertaleModLib;
 using UndertaleModLib.Scripting;
 using System.Security.Cryptography;
 using Avalonia.Controls;
 using Avalonia.Threading;
+using MessageBox.Avalonia.Enums;
 using UndertaleModLib.Models;
 using UndertaleModLib.Decompiler;
 
@@ -77,7 +76,7 @@ namespace UndertaleModToolAvalonia
                         if (Directory.Exists(Path.Combine(ProfilesFolder, reportedHashOfCrashedFile)) &&
                             profileHashOfCrashedFile == reportedHashOfCrashedFile)
                         {
-                            if (MessageBox.Show("UndertaleModTool crashed during usage last time while editing " + pathOfCrashedFile + ", would you like to recover your code now?", "UndertaleModTool", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
+                            if (MessageBox.Show("UndertaleModTool crashed during usage last time while editing " + pathOfCrashedFile + ", would you like to recover your code now?", "UndertaleModTool", MessageBoxButton.YesNo, MessageBoxImage.Question) == ButtonResult.Yes)
                             {
                                 LoadFile(pathOfCrashedFile, true).ContinueWith((t) => { });
                                 if (Data == null)
@@ -100,7 +99,7 @@ namespace UndertaleModToolAvalonia
                                 codeLoadDialog.TryClose();
                                 MessageBox.Show("Completed.");
                             }
-                            else if (MessageBox.Show("Would you like to move this code to the \"Recovered\" folder now? Any previous code there will be cleared!", "UndertaleModTool", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
+                            else if (MessageBox.Show("Would you like to move this code to the \"Recovered\" folder now? Any previous code there will be cleared!", "UndertaleModTool", MessageBoxButton.YesNo, MessageBoxImage.Question) == ButtonResult.Yes)
                             {
                                 MessageBox.Show("Your code can be recovered from the \"Recovered\" folder at any time.");
                                 string recoveredDir = Path.Combine(AppDataFolder, "Recovered", reportedHashOfCrashedFile);

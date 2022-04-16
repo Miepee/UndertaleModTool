@@ -1,19 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+using Avalonia;
+using Avalonia.Controls;
+using Avalonia.Data;
+using Avalonia.Data.Converters;
+using Avalonia.Media;
 
 namespace UndertaleModToolAvalonia
 {
@@ -22,14 +19,14 @@ namespace UndertaleModToolAvalonia
     /// </summary>
     public partial class ColorPicker : UserControl
     {
-        public static DependencyProperty ColorProperty =
-            DependencyProperty.Register("Color", typeof(uint),
+        public static AvaloniaProperty ColorProperty =
+            AvaloniaProperty.Register<>("Color", typeof(uint),
                 typeof(ColorPicker),
                 new FrameworkPropertyMetadata(0xFFFFFFFF,
                     FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
 
-        public static DependencyProperty HasAlphaProperty =
-            DependencyProperty.Register("HasAlpha", typeof(bool),
+        public static AvaloniaProperty HasAlphaProperty =
+            AvaloniaProperty.Register<>("HasAlpha", typeof(bool),
                 typeof(ColorPicker),
                 new FrameworkPropertyMetadata(true,
                     FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, OnHasAlphaChanged));
@@ -47,7 +44,8 @@ namespace UndertaleModToolAvalonia
 
         public ColorPicker()
         {
-            InitializeComponent();
+            InitializeIfNeeded();
+            //InitializeComponent();
 
             Binding binding = new("Color")
             {
@@ -62,7 +60,7 @@ namespace UndertaleModToolAvalonia
             ColorText.ToolTip = $"{(HasAlpha ? "A, " : "")}B, G, R";
         }
 
-        private static void OnHasAlphaChanged(DependencyObject dependencyObject, DependencyPropertyChangedEventArgs e)
+        private static void OnHasAlphaChanged(DependencyObject dependencyObject, AvaloniaPropertyChangedEventArgs e)
         {
             bool hasAlpha = (bool)e.NewValue;
             ColorPicker colorPicker = dependencyObject as ColorPicker;

@@ -25,27 +25,28 @@
         <PackageReference Include="Avalonia.Xaml.Behaviors" Version="0.10.13.3" />
         <PackageReference Include="log4net" Version="2.0.12" />
         <PackageReference Include="MessageBox.Avalonia" Version="2.0.0" />
+        <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Scripting" Version="3.9.0" />
         <PackageReference Include="Microsoft.CodeAnalysis.Scripting.Common" Version="3.9.0" />
         <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
         <PackageReference Include="XamlNameReferenceGenerator" Version="1.3.4" />
     </ItemGroup>
     <ItemGroup>
-      <Page Include="Controls\AudioFileReference.xaml">
+      <AvaloniaXaml Include="Controls\AudioFileReference.axaml">
         <Generator>MSBuild:Compile</Generator>
         <XamlRuntime>Wpf</XamlRuntime>
-      </Page>
+      </AvaloniaXaml>
       <Page Include="Controls\ColorPicker.xaml">
         <Generator>MSBuild:Compile</Generator>
         <XamlRuntime>Wpf</XamlRuntime>
       </Page>
-      <Page Include="Controls\UndertaleObjectReference.xaml">
+      <AvaloniaXaml Include="Controls\UndertaleObjectReference.axaml">
         <Generator>MSBuild:Compile</Generator>
         <XamlRuntime>Wpf</XamlRuntime>
-      </Page>
-      <Page Include="Controls\UndertaleRoomRenderer.xaml">
+      </AvaloniaXaml>
+      <AvaloniaXaml Include="Controls\UndertaleRoomRenderer.axaml">
         <Generator>MSBuild:Compile</Generator>
         <XamlRuntime>Wpf</XamlRuntime>
-      </Page>
+      </AvaloniaXaml>
       <AvaloniaXaml Include="Controls\UndertaleStringReference.axaml">
         <Generator>MSBuild:Compile</Generator>
         <XamlRuntime>Wpf</XamlRuntime>
@@ -54,130 +55,130 @@
         <Generator>MSBuild:Compile</Generator>
         <XamlRuntime>Wpf</XamlRuntime>
       </AvaloniaXaml>
-      <Page Include="Editors\UndertaleAudioGroupEditor.xaml">
+      <AvaloniaXaml Include="Editors\UndertaleAudioGroupEditor.axaml">
         <Generator>MSBuild:Compile</Generator>
         <XamlRuntime>Wpf</XamlRuntime>
-      </Page>
-      <Page Include="Editors\UndertaleBackgroundEditor.xaml">
+      </AvaloniaXaml>
+      <AvaloniaXaml Include="Editors\UndertaleBackgroundEditor.axaml">
         <Generator>MSBuild:Compile</Generator>
         <XamlRuntime>Wpf</XamlRuntime>
-      </Page>
-      <Page Include="Editors\UndertaleCodeEditor.xaml">
+      </AvaloniaXaml>
+      <AvaloniaXaml Include="Editors\UndertaleCodeEditor.axaml">
         <Generator>MSBuild:Compile</Generator>
         <XamlRuntime>Wpf</XamlRuntime>
-      </Page>
-      <Page Include="Editors\UndertaleCodeLocalsEditor.xaml">
+      </AvaloniaXaml>
+      <AvaloniaXaml Include="Editors\UndertaleCodeLocalsEditor.axaml">
         <Generator>MSBuild:Compile</Generator>
         <XamlRuntime>Wpf</XamlRuntime>
-      </Page>
-      <Page Include="Editors\UndertaleEmbeddedAudioEditor.xaml">
+      </AvaloniaXaml>
+      <AvaloniaXaml Include="Editors\UndertaleEmbeddedAudioEditor.axaml">
         <Generator>MSBuild:Compile</Generator>
         <XamlRuntime>Wpf</XamlRuntime>
-      </Page>
-      <Page Include="Editors\UndertaleEmbeddedImageEditor.xaml">
+      </AvaloniaXaml>
+      <AvaloniaXaml Include="Editors\UndertaleEmbeddedImageEditor.axaml">
         <Generator>MSBuild:Compile</Generator>
         <XamlRuntime>Wpf</XamlRuntime>
-      </Page>
-      <Page Include="Editors\UndertaleEmbeddedTextureEditor.xaml">
+      </AvaloniaXaml>
+      <AvaloniaXaml Include="Editors\UndertaleEmbeddedTextureEditor.axaml">
         <Generator>MSBuild:Compile</Generator>
         <XamlRuntime>Wpf</XamlRuntime>
-      </Page>
-      <Page Include="Editors\UndertaleExtensionEditor.xaml">
+      </AvaloniaXaml>
+      <AvaloniaXaml Include="Editors\UndertaleExtensionEditor.axaml">
         <Generator>MSBuild:Compile</Generator>
         <XamlRuntime>Wpf</XamlRuntime>
-      </Page>
-      <Page Include="Editors\UndertaleExtensionFileEditor.xaml">
+      </AvaloniaXaml>
+      <AvaloniaXaml Include="Editors\UndertaleExtensionFileEditor.axaml">
         <Generator>MSBuild:Compile</Generator>
         <XamlRuntime>Wpf</XamlRuntime>
-      </Page>
-      <Page Include="Editors\UndertaleExtensionFunctionEditor.xaml">
+      </AvaloniaXaml>
+      <AvaloniaXaml Include="Editors\UndertaleExtensionFunctionEditor.axaml">
         <Generator>MSBuild:Compile</Generator>
         <XamlRuntime>Wpf</XamlRuntime>
-      </Page>
-      <Page Include="Editors\UndertaleFontEditor.xaml">
+      </AvaloniaXaml>
+      <AvaloniaXaml Include="Editors\UndertaleFontEditor.axaml">
         <Generator>MSBuild:Compile</Generator>
         <XamlRuntime>Wpf</XamlRuntime>
-      </Page>
-      <Page Include="Editors\UndertaleFunctionEditor.xaml">
+      </AvaloniaXaml>
+      <AvaloniaXaml Include="Editors\UndertaleFunctionEditor.axaml">
         <Generator>MSBuild:Compile</Generator>
         <XamlRuntime>Wpf</XamlRuntime>
-      </Page>
-      <Page Include="Editors\UndertaleGameEndEditor.xaml">
+      </AvaloniaXaml>
+      <AvaloniaXaml Include="Editors\UndertaleGameEndEditor.axaml">
         <Generator>MSBuild:Compile</Generator>
         <XamlRuntime>Wpf</XamlRuntime>
-      </Page>
-      <Page Include="Editors\UndertaleGameObjectEditor.xaml">
+      </AvaloniaXaml>
+      <AvaloniaXaml Include="Editors\UndertaleGameObjectEditor.axaml">
         <Generator>MSBuild:Compile</Generator>
         <XamlRuntime>Wpf</XamlRuntime>
-      </Page>
-      <Page Include="Editors\UndertaleGeneralInfoEditor.xaml">
+      </AvaloniaXaml>
+      <AvaloniaXaml Include="Editors\UndertaleGeneralInfoEditor.axaml">
         <Generator>MSBuild:Compile</Generator>
         <XamlRuntime>Wpf</XamlRuntime>
-      </Page>
-      <Page Include="Editors\UndertaleGlobalInitEditor.xaml">
+      </AvaloniaXaml>
+      <AvaloniaXaml Include="Editors\UndertaleGlobalInitEditor.axaml">
         <Generator>MSBuild:Compile</Generator>
         <XamlRuntime>Wpf</XamlRuntime>
-      </Page>
-      <Page Include="Editors\UndertalePathEditor.xaml">
+      </AvaloniaXaml>
+      <AvaloniaXaml Include="Editors\UndertalePathEditor.axaml">
         <Generator>MSBuild:Compile</Generator>
         <XamlRuntime>Wpf</XamlRuntime>
-      </Page>
-      <Page Include="Editors\UndertaleRoomEditor.xaml">
+      </AvaloniaXaml>
+      <AvaloniaXaml Include="Editors\UndertaleRoomEditor.axaml">
         <Generator>MSBuild:Compile</Generator>
         <XamlRuntime>Wpf</XamlRuntime>
-      </Page>
-      <Page Include="Editors\UndertaleScriptEditor.xaml">
+      </AvaloniaXaml>
+      <AvaloniaXaml Include="Editors\UndertaleScriptEditor.axaml">
         <Generator>MSBuild:Compile</Generator>
         <XamlRuntime>Wpf</XamlRuntime>
-      </Page>
-      <Page Include="Editors\UndertaleShaderEditor.xaml">
+      </AvaloniaXaml>
+      <AvaloniaXaml Include="Editors\UndertaleShaderEditor.axaml">
         <Generator>MSBuild:Compile</Generator>
         <XamlRuntime>Wpf</XamlRuntime>
-      </Page>
-      <Page Include="Editors\UndertaleSoundEditor.xaml">
+      </AvaloniaXaml>
+      <AvaloniaXaml Include="Editors\UndertaleSoundEditor.axaml">
         <Generator>MSBuild:Compile</Generator>
         <XamlRuntime>Wpf</XamlRuntime>
-      </Page>
-      <Page Include="Editors\UndertaleSpriteEditor.xaml">
+      </AvaloniaXaml>
+      <AvaloniaXaml Include="Editors\UndertaleSpriteEditor.axaml">
         <Generator>MSBuild:Compile</Generator>
         <XamlRuntime>Wpf</XamlRuntime>
-      </Page>
-      <Page Include="Editors\UndertaleStringEditor.xaml">
+      </AvaloniaXaml>
+      <AvaloniaXaml Include="Editors\UndertaleStringEditor.axaml">
         <Generator>MSBuild:Compile</Generator>
         <XamlRuntime>Wpf</XamlRuntime>
-      </Page>
-      <Page Include="Editors\UndertaleTextureGroupInfoEditor.xaml">
+      </AvaloniaXaml>
+      <AvaloniaXaml Include="Editors\UndertaleTextureGroupInfoEditor.axaml">
         <Generator>MSBuild:Compile</Generator>
         <XamlRuntime>Wpf</XamlRuntime>
-      </Page>
-      <Page Include="Editors\UndertaleTexturePageItemEditor.xaml">
+      </AvaloniaXaml>
+      <AvaloniaXaml Include="Editors\UndertaleTexturePageItemEditor.axaml">
         <Generator>MSBuild:Compile</Generator>
         <XamlRuntime>Wpf</XamlRuntime>
-      </Page>
-      <Page Include="Editors\UndertaleTimelineEditor.xaml">
+      </AvaloniaXaml>
+      <AvaloniaXaml Include="Editors\UndertaleTimelineEditor.axaml">
         <Generator>MSBuild:Compile</Generator>
         <XamlRuntime>Wpf</XamlRuntime>
-      </Page>
-      <Page Include="Editors\UndertaleVariableChunkEditor.xaml">
+      </AvaloniaXaml>
+      <AvaloniaXaml Include="Editors\UndertaleVariableChunkEditor.axaml">
         <Generator>MSBuild:Compile</Generator>
         <XamlRuntime>Wpf</XamlRuntime>
-      </Page>
-      <Page Include="Editors\UndertaleVariableEditor.xaml">
+      </AvaloniaXaml>
+      <AvaloniaXaml Include="Editors\UndertaleVariableEditor.axaml">
         <Generator>MSBuild:Compile</Generator>
         <XamlRuntime>Wpf</XamlRuntime>
-      </Page>
-      <Page Include="Windows\ClickableTextOutput.xaml">
+      </AvaloniaXaml>
+      <AvaloniaXaml Include="Windows\ClickableTextOutput.axaml">
         <Generator>MSBuild:Compile</Generator>
         <XamlRuntime>Wpf</XamlRuntime>
-      </Page>
-      <Page Include="Windows\DebugDataDialog.xaml">
+      </AvaloniaXaml>
+      <AvaloniaXaml Include="Windows\DebugDataDialog.axaml">
         <Generator>MSBuild:Compile</Generator>
         <XamlRuntime>Wpf</XamlRuntime>
-      </Page>
-      <Page Include="Windows\LoaderDialog.xaml">
+      </AvaloniaXaml>
+      <AvaloniaXaml Include="Windows\LoaderDialog.axaml">
         <Generator>MSBuild:Compile</Generator>
         <XamlRuntime>Wpf</XamlRuntime>
-      </Page>
+      </AvaloniaXaml>
       <AvaloniaXaml Include="Windows\RuntimePicker.axaml">
         <Generator>MSBuild:Compile</Generator>
         <XamlRuntime>Wpf</XamlRuntime>
@@ -186,14 +187,14 @@
         <Generator>MSBuild:Compile</Generator>
         <XamlRuntime>Wpf</XamlRuntime>
       </AvaloniaXaml>
-      <Page Include="Windows\StringUpdateWindow.xaml">
+      <AvaloniaXaml Include="Windows\StringUpdateWindow.axaml">
         <Generator>MSBuild:Compile</Generator>
         <XamlRuntime>Wpf</XamlRuntime>
-      </Page>
-      <Page Include="Windows\TextInputDialog.xaml">
+      </AvaloniaXaml>
+      <AvaloniaXaml Include="Windows\TextInputDialog.axaml">
         <Generator>MSBuild:Compile</Generator>
         <XamlRuntime>Wpf</XamlRuntime>
-      </Page>
+      </AvaloniaXaml>
     </ItemGroup>
     <ItemGroup>
       <ProjectReference Include="..\UndertaleModLib\UndertaleModLib.csproj" />
