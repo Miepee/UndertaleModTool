@@ -25,6 +25,7 @@
         <PackageReference Include="Avalonia.Xaml.Behaviors" Version="0.10.13.3" />
         <PackageReference Include="log4net" Version="2.0.12" />
         <PackageReference Include="MessageBox.Avalonia" Version="2.0.0" />
+        <PackageReference Include="Microsoft.CodeAnalysis.Scripting.Common" Version="3.9.0" />
         <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
         <PackageReference Include="XamlNameReferenceGenerator" Version="1.3.4" />
     </ItemGroup>
@@ -45,14 +46,14 @@
         <Generator>MSBuild:Compile</Generator>
         <XamlRuntime>Wpf</XamlRuntime>
       </Page>
-      <Page Include="Controls\UndertaleStringReference.xaml">
+      <AvaloniaXaml Include="Controls\UndertaleStringReference.axaml">
         <Generator>MSBuild:Compile</Generator>
         <XamlRuntime>Wpf</XamlRuntime>
-      </Page>
-      <Page Include="Controls\UndertaleTexturePageItemDisplay.xaml">
+      </AvaloniaXaml>
+      <AvaloniaXaml Include="Controls\UndertaleTexturePageItemDisplay.axaml">
         <Generator>MSBuild:Compile</Generator>
         <XamlRuntime>Wpf</XamlRuntime>
-      </Page>
+      </AvaloniaXaml>
       <Page Include="Editors\UndertaleAudioGroupEditor.xaml">
         <Generator>MSBuild:Compile</Generator>
         <XamlRuntime>Wpf</XamlRuntime>
@@ -165,8 +166,44 @@
         <Generator>MSBuild:Compile</Generator>
         <XamlRuntime>Wpf</XamlRuntime>
       </Page>
+      <Page Include="Windows\ClickableTextOutput.xaml">
+        <Generator>MSBuild:Compile</Generator>
+        <XamlRuntime>Wpf</XamlRuntime>
+      </Page>
+      <Page Include="Windows\DebugDataDialog.xaml">
+        <Generator>MSBuild:Compile</Generator>
+        <XamlRuntime>Wpf</XamlRuntime>
+      </Page>
+      <Page Include="Windows\LoaderDialog.xaml">
+        <Generator>MSBuild:Compile</Generator>
+        <XamlRuntime>Wpf</XamlRuntime>
+      </Page>
+      <AvaloniaXaml Include="Windows\RuntimePicker.axaml">
+        <Generator>MSBuild:Compile</Generator>
+        <XamlRuntime>Wpf</XamlRuntime>
+      </AvaloniaXaml>
+      <AvaloniaXaml Include="Windows\SettingsWindow.axaml">
+        <Generator>MSBuild:Compile</Generator>
+        <XamlRuntime>Wpf</XamlRuntime>
+      </AvaloniaXaml>
+      <Page Include="Windows\StringUpdateWindow.xaml">
+        <Generator>MSBuild:Compile</Generator>
+        <XamlRuntime>Wpf</XamlRuntime>
+      </Page>
+      <Page Include="Windows\TextInputDialog.xaml">
+        <Generator>MSBuild:Compile</Generator>
+        <XamlRuntime>Wpf</XamlRuntime>
+      </Page>
     </ItemGroup>
     <ItemGroup>
       <ProjectReference Include="..\UndertaleModLib\UndertaleModLib.csproj" />
+    </ItemGroup>
+    <ItemGroup>
+      <Compile Update="Windows\TextInput.cs">
+        <SubType>Form</SubType>
+      </Compile>
+    </ItemGroup>
+    <ItemGroup>
+      <AdditionalFiles Include="Windows\TextInput.resx" />
     </ItemGroup>
 </Project>

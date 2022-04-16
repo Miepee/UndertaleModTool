@@ -6,8 +6,8 @@ namespace UndertaleModToolAvalonia
 {
     public sealed class NullToVisibilityConverter : IValueConverter
     {
-        public Visibility nullValue { get; set; }
-        public Visibility notNullValue { get; set; }
+        public bool nullValue { get; set; }
+        public bool notNullValue { get; set; }
 
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {

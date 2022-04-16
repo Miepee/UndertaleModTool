@@ -186,8 +186,8 @@ namespace UndertaleModToolAvalonia
         public string FilePath { get; set; }
         public string ScriptPath { get; set; } // For the scripting interface specifically
 
-        private Bitmap CloseButton = new Bitmap(new Uri(@"/Resources/X.png", UriKind.RelativeOrAbsolute));
-        private Bitmap CloseButtonHover = new Bitmap(new Uri(@"/Resources/X_Down.png", UriKind.RelativeOrAbsolute));
+        private Bitmap CloseButton = new Bitmap(@"/Resources/X.png");
+        private Bitmap CloseButtonHover = new Bitmap(@"/Resources/X_Down.png");
 
         public string TitleMain { get; set; }
 
@@ -200,7 +200,7 @@ namespace UndertaleModToolAvalonia
 
         public bool IsGMS2 => (Data?.GeneralInfo?.Major ?? 0) >= 2 ? true : false;
         // God this is so ugly, if there's a better way, please, put in a pull request
-        public bool IsExtProductIDEligible => (((Data?.GeneralInfo?.Major ?? 0) >= 2) || (((Data?.GeneralInfo?.Major ?? 0) == 1) && (((Data?.GeneralInfo?.Build ?? 0) >= 1773) || ((Data?.GeneralInfo?.Build ?? 0) == 1539)))) ? Visibility.Visible : Visibility.Collapsed;
+        public bool IsExtProductIDEligible => (((Data?.GeneralInfo?.Major ?? 0) >= 2) || (((Data?.GeneralInfo?.Major ?? 0) == 1) && (((Data?.GeneralInfo?.Build ?? 0) >= 1773) || ((Data?.GeneralInfo?.Build ?? 0) == 1539)))) ? true : false;
         public bool CanSave { get; set; }
         public bool CanSafelySave = false;
         public bool WasWarnedAboutTempRun = false;
@@ -291,7 +291,8 @@ namespace UndertaleModToolAvalonia
 
         public MainWindow()
         {
-            InitializeComponent();
+            InitializeIfNeeded();
+            //InitializeComponent();
             this.DataContext = this;
 
             OpenInNewTab(new DescriptionView("Welcome to UndertaleModTool!", "Open data.win file to get started, then double click on the items on the left to view them"), "Welcome!");

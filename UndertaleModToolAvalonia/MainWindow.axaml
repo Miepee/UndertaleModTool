@@ -22,38 +22,26 @@
         <Window.Resources>
                 <local:ImplementsInterfaceConverter x:Key="ImplementsInterfaceConverter"/>
                 <local:FilteredViewConverter x:Key="FilteredViewConverter" Filter="{Binding Text, Source={x:Reference SearchBox}, RelativeSource=PropertyChanged}"/>
-                <local:NullToIsVisibleConverter x:Key="VisibleIfNotNull"  nullValue="Collapsed" notNullValue="Visible"/>
+                <local:NullToVisibilityConverter x:Key="VisibleIfNotNull"  nullValue="false" notNullValue="true"/>
         </Window.Resources>
-        <Window.CommandBindings>
-                <CommandBinding Command="New" Executed="Command_New" />
-                <CommandBinding Command="Open" Executed="Command_Open" />
-                <CommandBinding Command="Save" Executed="Command_Save" />
-                <CommandBinding Command="Close" Executed="Command_Close" />
-                <CommandBinding Command="Copy" Executed="Command_Copy" />
-                <CommandBinding Command="Paste" Executed="Command_Paste" />
-                <CommandBinding Command="Print" Executed="Command_Run" />
-                <CommandBinding Command="CancelPrint" Executed="Command_RunSpecial" />
-                <CommandBinding Command="PrintPreview" Executed="Command_RunDebug" />
-                <CommandBinding Command="Properties" Executed="Command_Settings"/>
-        </Window.CommandBindings>
         <Window.KeyBindings>
-                <KeyBinding Modifiers="Control" Key="N" Command="New"/>
-                <KeyBinding Modifiers="Control" Key="O" Command="Open"/>
-                <KeyBinding Modifiers="Control" Key="S" Command="Save"/>
-                <KeyBinding Modifiers="Control" Key="W" Command="Close"/>
-                <KeyBinding Modifiers="Control" Key="C" Command="Copy"/>
-                <KeyBinding Modifiers="Control" Key="P" Command="Paste"/>
-                <KeyBinding Key="F5" Command="Print"/>
-                <KeyBinding Modifiers="Alt" Key="F5" Command="CancelPrint"/>
-                <KeyBinding Modifiers="Shift" Key="F5" Command="PrintPreview"/>
+                <KeyBinding <!--Modifiers="Control"--> Gesture="N" Command="{Binding New}"/>
+                <KeyBinding <!--Modifiers="Control"--> Gesture="O" Command="{Binding Open}"/>
+                <KeyBinding <!--Modifiers="Control"--> Gesture="S" Command="{Binding Save}"/>
+                <KeyBinding <!--Modifiers="Control"--> Gesture="W" Command="{Binding Close}"/>
+                <KeyBinding <!--Modifiers="Control"--> Gesture="C" Command="{Binding Copy}"/>
+                <KeyBinding <!--Modifiers="Control"--> Gesture="P" Command="{Binding Paste}"/>
+                <KeyBinding Gesture="F5" Command="{Binding Print}"/>
+                <KeyBinding <!--Modifiers="Alt"--> Gesture="F5" Command="{Binding CancelPrint}"/>
+                <KeyBinding <!--Modifiers="Shift"--> Gesture="F5" Command="{Binding PrintPreview}"/>
         </Window.KeyBindings>
         <Grid>
         <DockPanel>
             <Menu DockPanel.Dock="Top">
                 <MenuItem Header="_File">
-                    <MenuItem Header="_New" Command="New" InputGesture="Ctrl+N"/>
-                    <MenuItem Header="_Open" Command="Open" InputGesture="Ctrl+O"/>
-                    <MenuItem Header="_Save" Command="Save" InputGesture="Ctrl+S">
+                    <MenuItem Header="_New" Command="{Binding New}" InputGesture="Ctrl+N"/>
+                    <MenuItem Header="_Open" Command="{Binding Open}" InputGesture="Ctrl+O"/>
+                    <MenuItem Header="_Save" Command="{Binding Save}" InputGesture="Ctrl+S">
                         <MenuItem.Styles>
                             <Style TargetType="{x:Type MenuItem}">
                                 <Setter Property="IsEnabled" Value="{Binding CanSave}"/>
@@ -61,7 +49,7 @@
                         </MenuItem.Styles>
                     </MenuItem>
                     <Separator/>
-                    <MenuItem Header="_Temp run game" Command="Print" InputGesture="F5">
+                    <MenuItem Header="_Temp run game" Command="{Binding Print}" InputGesture="F5">
                         <!-- TODO: I think I need a custom command for that... -->
                         <MenuItem.Styles>
                             <Style TargetType="{x:Type MenuItem}">
@@ -69,14 +57,14 @@
                             </Style>
                         </MenuItem.Styles>
                     </MenuItem>
-                    <MenuItem Header="Run game under _debugger" Command="PrintPreview" InputGesture="Shift+F5">
+                    <MenuItem Header="Run game under _debugger" Command="{Binding PrintPreview}" InputGesture="Shift+F5">
                         <MenuItem.Styles>
                             <Style TargetType="{x:Type MenuItem}">
                                 <Setter Property="IsEnabled" Value="{Binding CanSave}"/>
                             </Style>
                         </MenuItem.Styles>
                     </MenuItem>
-                    <MenuItem Header="Run game with other runner" Command="CancelPrint" InputGesture="Alt+F5">
+                    <MenuItem Header="Run game with other runner" Command="{Binding CancelPrint}" InputGesture="Alt+F5">
                         <MenuItem.Styles>
                             <Style TargetType="{x:Type MenuItem}">
                                 <Setter Property="IsEnabled" Value="{Binding CanSave}"/>
@@ -86,8 +74,8 @@
                     <Separator/>
                     <MenuItem Header="Generate o_ffset map" Click="MenuItem_OffsetMap_Click"/>
                     <Separator/>
-                    <MenuItem Header="S_ettings" Command="Properties"/>
-                    <MenuItem Header="_Close" Command="Close" InputGestureText="Ctrl+W"/>
+                    <MenuItem Header="S_ettings" Command="{Binding Properties}"/>
+                    <MenuItem Header="_Close" Command="{Binding Close}" InputGesture="Ctrl+W"/>
                 </MenuItem>
                 <MenuItem Header="_Scripts">
                     <MenuItem Header="_Run builtin script" SubmenuOpened="MenuItem_RunBuiltinScript_SubmenuOpened">
@@ -134,7 +122,7 @@
                         <ColumnDefinition Width="Auto"/>
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
-                    <Button Grid.Column="0" ToolTip="Back" Margin="0,0,5,0" Name="BackButton" Click="BackButton_Click">
+                    <Button Grid.Column="0" ToolTip.Tip="Back" Margin="0,0,5,0" Name="BackButton" Click="BackButton_Click">
                         <Button.Styles>
                             <Style TargetType="Button">
                                 <Style.Triggers>
@@ -162,7 +150,7 @@
                             </Image.Styles>
                         </Image>
                     </Button>
-                    <TextBox Grid.Column="1" Name="SearchBox" ToolTip="Search" TextChanged="SearchBox_TextChanged"/>
+                    <TextBox Grid.Column="1" Name="SearchBox" ToolTip.Tip="Search" TextChanged="SearchBox_TextChanged"/>
                 </Grid>
                 <TreeView Grid.Column="0" Grid.Row="1" Margin="5" DataContext="{Binding Data}" SelectionChanged="TreeView_SelectedItemChanged" MouseDoubleClick="MainTree_MouseDoubleClick" KeyUp="MainTree_KeyUp" AllowDrop="True" Name="MainTree" KeyDown="MainTree_KeyDown" PreviewMouseRightButtonDown="MainTree_PreviewMouseRightButtonDown">
                     <!--

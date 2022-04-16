@@ -1,12 +1,12 @@
-﻿<local:DataUserControl x:Class="UndertaleModTool.UndertaleRoomRenderer"
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+﻿<local:DataUserControl x:Class="UndertaleModToolAvalonia.UndertaleRoomRenderer"
+             xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:UndertaleModTool"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:UndertaleModToolAvalonia"
              xmlns:undertale="clr-namespace:UndertaleModLib.Models;assembly=UndertaleModLib"
-             xmlns:sys="clr-namespace:System;assembly=mscorlib" 
-             mc:Ignorable="d" 
+             xmlns:sys="clr-namespace:System;assembly=mscorlib"
+             mc:Ignorable="d"
              d:DesignHeight="450" d:DesignWidth="800"
              d:DataContext="{d:DesignInstance undertale:UndertaleRoom}" x:Name="RoomRenderer"
              DataContextChanged="RoomRenderer_DataContextChanged">
@@ -20,7 +20,7 @@
         <local:RoomCaptionConverter x:Key="RoomCaptionConverter" />
         <local:BGColorConverter x:Key="BGColorConverter"/>
         <local:BGViewportConverter x:Key="BGViewportConverter"/>
-        <BooleanToVisibilityConverter x:Key="BoolToVisConverter"/>
+        <local:BooleanToVisibilityConverter x:Key="BoolToVisConverter"/>
         <local:BGLayerVisConverter x:Key="BGLayerVisConverter"/>
         <local:ColorToOpacityConverter x:Key="ColorToOpacityConverter"/>
         <local:CachedTileDataLoader x:Key="CachedTileDataLoader"/>
@@ -117,7 +117,7 @@
                         </Rectangle.RenderTransform>
                         <Rectangle.Fill>
                             <ImageBrush
-                                ImageSource="{Binding BackgroundDefinition.Texture, Converter={StaticResource UndertaleCachedImageLoader}, Mode=OneTime}" 
+                                ImageSource="{Binding BackgroundDefinition.Texture, Converter={StaticResource UndertaleCachedImageLoader}, Mode=OneTime}"
                                 ViewportUnits="Absolute"
                                 AlignmentX="Left" AlignmentY="Top"
                                 TileMode="None"
@@ -249,7 +249,7 @@
                         </ItemsControl.ItemsSource>
                         <ItemsControl.ItemsPanel>
                             <ItemsPanelTemplate>
-                                <Canvas 
+                                <Canvas
                                     Width="{Binding ParentLayer.ParentRoom.Width, Mode=OneTime}" Height="{Binding ParentLayer.ParentRoom.Height, Mode=OneTime}"
                                     Visibility="{Binding ParentLayer.IsVisible, Mode=OneTime, Converter={StaticResource BoolToVisConverter}}"/>
                             </ItemsPanelTemplate>

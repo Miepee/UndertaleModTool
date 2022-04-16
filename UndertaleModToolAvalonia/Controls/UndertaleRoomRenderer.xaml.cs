@@ -7,16 +7,14 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using System.Windows.Threading;
+using Avalonia;
+using Avalonia.Controls;
+using Avalonia.Data.Converters;
+using Avalonia.Interactivity;
+using Avalonia.Markup.Xaml.Templates;
+using Avalonia.Media;
+using Avalonia.Media.Imaging;
+using Avalonia.Threading;
 using UndertaleModLib.Models;
 
 namespace UndertaleModToolAvalonia
@@ -48,7 +46,8 @@ namespace UndertaleModToolAvalonia
 
         public UndertaleRoomRenderer()
         {
-            InitializeComponent();
+            InitializeIfNeeded();
+            //InitializeComponent();
         }
 
         private void RoomRenderer_DataContextChanged(object sender, DependencyPropertyChangedEventArgs e)
@@ -92,7 +91,7 @@ namespace UndertaleModToolAvalonia
                     bgGridDisabled = true;
                 }
 
-                RenderTargetBitmap target = new((int)roomCanvas.RenderSize.Width, (int)roomCanvas.RenderSize.Height, 96, 96, PixelFormats.Pbgra32);
+                RenderTargetBitmap target = new((int)roomCanvas.Width, (int)roomCanvas.Height, 96, 96, PixelFormats.Pbgra32);
 
                 target.Render(roomCanvas);
 

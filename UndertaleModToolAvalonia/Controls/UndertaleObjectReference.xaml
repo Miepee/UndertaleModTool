@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="UndertaleModTool.UndertaleObjectReference"
+﻿<UserControl x:Class="UndertaleModToolAvalonia.UndertaleObjectReference"
              xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -12,7 +12,7 @@
             <ColumnDefinition Width="Auto"/>
             <ColumnDefinition Width="Auto"/>
         </Grid.ColumnDefinitions>
-        <TextBox Grid.Column="0" IsReadOnly="True" Cursor="Arrow" ToolTip="This is an object reference. Drag and drop an object of matching type from the tree on the left to change it!" AllowDrop="True" PreviewDragOver="TextBox_DragOver" PreviewDrop="TextBox_Drop" PreviewMouseDoubleClick="TextBox_MouseDoubleClick" Text="{Binding ObjectReference, RelativeSource={RelativeSource AncestorType=UserControl}}"/>
+        <TextBox Grid.Column="0" IsReadOnly="True" Cursor="Arrow" ToolTip.Tip="This is an object reference. Drag and drop an object of matching type from the tree on the left to change it!" AllowDrop="True" PreviewDragOver="TextBox_DragOver" PreviewDrop="TextBox_Drop" PreviewMouseDoubleClick="TextBox_MouseDoubleClick" Text="{Binding ObjectReference, RelativeSource={RelativeSource AncestorType=UserControl}}"/>
         <Button Grid.Column="1" Click="Details_Click">
             <Button.Style>
                 <Style TargetType="{x:Type Button}">
@@ -36,7 +36,7 @@
                 </Style>
             </Button.Style>
         </Button>
-        <Button Grid.Column="2" Click="Remove_Click" Content=" X " ToolTip="Remove reference">
+        <Button Grid.Column="2" Click="Remove_Click" Content=" X " ToolTip.Tip="Remove reference">
             <Button.Style>
                 <Style TargetType="{x:Type Button}">
                     <Style.Triggers>
