@@ -21,9 +21,9 @@ jobs:
             const issue_number = await (async () =>
             {
               const prs = await github.pulls.list({owner, repo});
-              for await (const response of github.paginate.iterator(prs))
+              for await (const {data} of github.paginate.iterator(prs))
               {
-                for (const pr of response)
+                for (const pr of data)
                 {
                   if (pr.head.sha == pr_sha)
                     return pr.number;
