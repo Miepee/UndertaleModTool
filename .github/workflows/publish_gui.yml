@@ -3,6 +3,7 @@ name: Publish GUI
 on:
   push:
     branches: [ master ]
+  pull_request:
   workflow_dispatch:
 
 jobs:
@@ -42,5 +43,5 @@ jobs:
     - name: Upload ${{ matrix.os }} GUI
       uses: actions/upload-artifact@v2
       with:
-        name: ${{ matrix.os }}-isBundled-${{ matrix.bundled }}-isSingleFile-${{ matrix.singlefile }}
+        name: GUI-${{ matrix.os }}-isBundled-${{ matrix.bundled }}-isSingleFile-${{ matrix.singlefile }}
         path: ${{ matrix.os }}
