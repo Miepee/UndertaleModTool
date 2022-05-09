@@ -21,10 +21,13 @@ jobs:
             const prNumber = await (async () =>
             {
               const prs = await github.pulls.list({owner, repo});
+              core.info("Entered pr function");
               for await (const response of github.paginate.iterator(prs))
               {
+                core.info("entered response loop");
                 for (const pr of response)
                 {
+                  core.info("entered pr loop");
                   if (pr.head.sha == prSha)
                     return pr.number;
                 }
