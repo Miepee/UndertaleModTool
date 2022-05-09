@@ -1,0 +1,72 @@
+name: Upload PR Artifacts
+on:
+  workflow_run:
+    workflows:
+      - Publish PR
+    types:
+      - completed
+jobs:
+  pr_Comment:
+    if: github.event.workflow_run.event == 'pull_request' && github.event.workflow_run.conclusion == 'success'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/github-script@v3
+        with:
+          script: |
+            const {owner, repo} = context.repo;
+            const runId = ${{github.event.workflow_run.id}};
+            const prSha = "${{github.event.workflow_run.head_sha}}";
+
+            // hack to get PR number - iterate through all PRs
+            const prNumber = await (async () =>
+            {
+              const prs = await github.pulls.list({owner, repo});
+              for await (const response of github.paginate.iterator(prs))
+              {
+                for (const pr of response)
+                {
+                  if (pr.head.sha == prSha)
+                    return pr.number;
+                }
+              }
+            })();
+            if (!prNumber)
+                return core.error("No pull request found");
+
+
+            core.info("Using pull request ${prNumber}");
+
+            const artifacts = await github.actions.listWorkflowRunArtifacts({owner, repo, runId});
+            if (!artifacts.length)
+                return core.error(`No artifacts found`);
+
+
+            let message = "Download the artifacts for this pull request:\n";
+            let guiPart = "\nGUI:\n";
+            let cliPart = "\nCLI:\n";
+            for (const artifact of artifacts)
+            {
+                if (artifact.name.includes("GUI-") && artifact.name.includes("isBundled-false"))
+                {
+                    guiPart += "\n* [${artifact.name}](https://nightly.link/${owner}/${repo}/actions/artifacts/${artifact.id}.zip)";
+                }
+                else if(artifact.name.includes("CLI-") && artifact.name.includes("isBundled-false"))
+                {
+                    cliPart += "\n* [${artifact.name}](https://nightly.link/${owner}/${repo}/actions/artifacts/${artifact.id}.zip)";
+                }
+            }
+            guiPart += "\n";
+            cliPart += "\n";
+            message += guiPart + cliPart;
+
+            const doesCommentExist = (await github.issues.listComments({repo, owner, prNumber})).find((c) => c.user.login == "github-actions[bot]");
+            if (doesCommentExist)
+            {
+                core.info("Updating existing comment on ${doesCommentExist.id}");
+                await github.issues.updateComment({repo, owner, doesCommentExist.id, message});
+            }
+            else
+            {
+                core.info("Creating new comment on ${doesCommentExist.id}");
+                await github.issues.createComment({repo, owner, prNumber, message});
+            }
