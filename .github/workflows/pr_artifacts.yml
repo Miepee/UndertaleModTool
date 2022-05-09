@@ -65,7 +65,7 @@ jobs:
             if (doesCommentExist)
             {
                 core.info("Updating existing comment on " + doesCommentExist.id);
-                await github.issues.updateComment({repo, owner, doesCommentExist.id, body});
+                await github.issues.updateComment({repo, owner, comment_id: doesCommentExist.id, body});
             }
             else
             {
