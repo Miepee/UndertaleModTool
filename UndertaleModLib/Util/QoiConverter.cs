@@ -70,7 +70,6 @@ namespace UndertaleModLib.Util
         public static SKBitmap GetImageFromSpan(ReadOnlySpan<byte> bytes) => GetImageFromSpan(bytes, out _);
 
         /// <inheritdoc cref="GetImageFromSpan(ReadOnlySpan{byte})"/>
-        /// <param name="bytes">The <see cref="ReadOnlySpan{TKey}"/> of <see cref="byte"/>s to create the PNG image from.</param>
         /// <param name="length">The total amount of data read from the <see cref="Span{TKey}"/>.</param>
         public unsafe static SKBitmap GetImageFromSpan(ReadOnlySpan<byte> bytes, out int length)
         {
