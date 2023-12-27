@@ -163,9 +163,13 @@ namespace UndertaleModTool
             {
                 try
                 {
-                    System.Drawing.Image img = System.Drawing.Image.FromFile(dlg.FileName);
-                    if ((sprite.Width != (uint)img.Width) || (sprite.Height != (uint)img.Height))
-                        throw new System.Exception(dlg.FileName + " is not the proper size to be imported! Please correct this before importing! The proper dimensions are width: " + sprite.Width.ToString() + " px, height: " + sprite.Height.ToString() + " px.");
+                    var imgSize = TextureWorker.GetImageSizeFromFile(dlg.FileName);
+                    if (imgSize == default)
+                        throw new Exception("Cannot read image width and height");
+
+                    if ((sprite.Width != (uint)imgSize.Width) || (sprite.Height != (uint)imgSize.Height))
+                        throw new Exception(dlg.FileName + " is not the proper size to be imported! Please correct this before importing! The proper dimensions are width: " + sprite.Width.ToString() + " px, height: " + sprite.Height.ToString() + " px.");
+                    
                     target.Data = TextureWorker.ReadMaskData(dlg.FileName);
                 }
                 catch (Exception ex)
