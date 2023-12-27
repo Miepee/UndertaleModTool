@@ -3,7 +3,7 @@
 using System.Text;
 using System;
 using System.IO;
-using SkiaSharp;
+using System.Drawing;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -47,7 +47,11 @@ void ImportTileset(UndertaleBackground tileset)
     try
     {
         string path = subPath + "\\" + tileset.Name.Content + ".png";
-        tileset.Texture.ReplaceTexture(SKBitmap.Decode(path), true);
+        if (File.Exists(path))
+        {
+            Bitmap img = new Bitmap(path);
+            tileset.Texture.ReplaceTexture((Image)img);
+        }
     }
     catch (Exception ex)
     {
