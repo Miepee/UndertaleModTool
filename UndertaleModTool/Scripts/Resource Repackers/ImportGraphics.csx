@@ -324,9 +324,7 @@ public class Packer
             string atlasName = String.Format(prefix + "{0:000}" + ".png", atlasCount);
             //1: Save images
             using SKBitmap img = CreateAtlasImage(atlas);
-            using FileStream fs = new(atlasName, FileMode.Create, FileAccess.Write);
-            img.Encode(fs, SKEncodedImageFormat.Png, 100);
-            fs.Close();
+            TextureWorker.SaveImageToFile(atlasName, img);
             //2: save description in file
             foreach (Node n in atlas.Nodes)
             {

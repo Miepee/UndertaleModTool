@@ -281,9 +281,7 @@ public class Packer
             string atlasName = String.Format(prefix + "{0:000}" + ".png", atlasCount);
             //1: Save images
             using SKBitmap img = CreateAtlasImage(atlas);
-            using FileStream fs = new(atlasName, FileMode.Create, FileAccess.Write);
-            img.Encode(fs, SKEncodedImageFormat.Png, 100);
-            fs.Close();
+            TextureWorker.SaveImageToFile(atlasName, img);
             //2: save description in file
             foreach (Node n in atlas.Nodes)
             {
@@ -477,8 +475,9 @@ public class Packer
                     SKRect labelBox = default;
                     paintWhite.MeasureText(label, ref labelBox);
                     SKRect rectBounds = SKRect.Create(n.Bounds.X, n.Bounds.Y, labelBox.Width, labelBox.Height);
+                    float yOff = paintWhite.FontMetrics.Ascent - paintWhite.FontMetrics.Descent - 1; // I am not sure if it's the correct way, but it works
                     g.DrawRect(rectBounds, paintBlack);
-                    g.DrawText(label, rectBounds.Left, rectBounds.Top, paintWhite);
+                    g.DrawText(label, rectBounds.Left, rectBounds.Top - yOff, paintWhite);
                 }
             }
             else
@@ -490,8 +489,9 @@ public class Packer
                     SKRect labelBox = default;
                     paintWhite.MeasureText(label, ref labelBox);
                     SKRect rectBounds = SKRect.Create(n.Bounds.X, n.Bounds.Y, labelBox.Width, labelBox.Height);
+                    float yOff = paintWhite.FontMetrics.Ascent - paintWhite.FontMetrics.Descent - 1;
                     g.DrawRect(rectBounds, paintBlack);
-                    g.DrawText(label, rectBounds.Left, rectBounds.Top, paintWhite);
+                    g.DrawText(label, rectBounds.Left, rectBounds.Top - yOff, paintWhite);
                 }
             }
         }

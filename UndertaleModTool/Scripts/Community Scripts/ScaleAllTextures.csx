@@ -130,7 +130,7 @@ ChangeSelection(Data.Rooms.ByName("room_ruins1"));
 void ScaleEmbeddedTexture(UndertaleEmbeddedTexture tex)
 {
     SKBitmap embImage = worker.GetEmbeddedTexture(tex);
-    embImage = worker.ResizeImage(embImage, (int)(embImage.Width * scale), (int)(embImage.Height * scale), true);
+    embImage = TextureWorker.ResizeImage(embImage, (int)(embImage.Width * scale), (int)(embImage.Height * scale), useNearestNeighbor: true);
     try
     {
         var width = (uint)embImage.Width;
