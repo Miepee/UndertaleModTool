@@ -39,11 +39,11 @@ foreach (string file in dirFiles)
     }
     var sprite = Data.Sprites.ByName(spriteName);
     if (sprite is null) // Reject non-existing sprites
-        throw new ScriptException(FileNameWithExtension + " could not be imported as the sprite " + spriteName + " does not exist.");
+        throw new ScriptException($"{FileNameWithExtension} could not be imported as the sprite {spriteName} does not exist.");
 
     var imgSize = TextureWorker.GetImageSizeFromFile(file);
     if ((sprite.Width != (uint)imgSize.Width) || (sprite.Height != (uint)imgSize.Height))
-        throw new ScriptException(FileNameWithExtension + " is not the proper size to be imported! Please correct this before importing! The proper dimensions are width: " + sprite.Width.ToString() + " px, height: " + sprite.Height.ToString() + " px.");
+        throw new ScriptException($"{FileNameWithExtension} is not the proper size to be imported! Please correct this before importing! The proper dimensions are width: {sprite.Width} px, height: {sprite.Height} px.");
 
     Int32 validFrameNumber = 0;
     try
