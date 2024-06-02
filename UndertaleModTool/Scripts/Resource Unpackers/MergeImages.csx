@@ -8,15 +8,15 @@ using System.Text;
 using UndertaleModLib.Util;
 
 string importFolderA = PromptChooseDirectory();
-if (importFolderA == null)
+if (importFolderA is null)
     throw new ScriptException("The import folder was not set.");
 
 string importFolderB = PromptChooseDirectory();
-if (importFolderB == null)
+if (importFolderB is null)
     throw new ScriptException("The import folder was not set.");
 
 string exportFolder = PromptChooseDirectory();
-if (exportFolder == null)
+if (exportFolder is null)
     throw new ScriptException("The export folder was not set.");
 
 string searchPattern = "*.png";
